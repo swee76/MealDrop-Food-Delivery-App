@@ -1,8 +1,9 @@
 import {Text, View} from 'react-native';
 import {Link} from "expo-router";
+import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 
-const MyComponent = () => (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+const Profile = () => (
+    <BasicPageWrapper>
         <Text style={{
             fontSize: 30,
             fontWeight: 'bold',
@@ -10,7 +11,7 @@ const MyComponent = () => (
         }}>Hello Profile</Text>
         <Link href={'/'}>Home</Link>
         <Link href={'/profile'}>Profile</Link>
-    </View>
+    </BasicPageWrapper>
 );
 
-export default MyComponent;
+export default Profile;

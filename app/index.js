@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native';
 import {Link} from "expo-router";
 
-const MyComponent = () => (
+const HomePage = () => (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'} }>
         <Text >Hello World</Text>
         <Link href={'/'}>Home</Link>
@@ -9,4 +9,4 @@ const MyComponent = () => (
     </View>
 );
 
-export default MyComponent;
+export default HomePage;
