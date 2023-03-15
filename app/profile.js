@@ -1,10 +1,13 @@
-import { View, Text } from 'react-native';
-import tw from 'twrnc';
+import {Text, View} from 'react-native';
 import {Link} from "expo-router";
 
 const MyComponent = () => (
-    <View style={tw`p-4 android:pt-2 bg-white dark:bg-black`}>
-        <Text style={tw`text-md text-black dark:text-white`}>Hello Profile</Text>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={{
+            fontSize: 30,
+            fontWeight: 'bold',
+            marginBottom: 20
+        }}>Hello Profile</Text>
         <Link href={'/'}>Home</Link>
         <Link href={'/profile'}>Profile</Link>
     </View>
