@@ -4,7 +4,7 @@ import {Text, View} from "react-native";
 const Header = () => {
     return (
         <View style={{
-            height: 70,
+            height: 90,
             backgroundColor: '#FF5A5F',
             justifyContent: 'center',
             alignItems: 'center'

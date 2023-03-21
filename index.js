@@ -12,7 +12,7 @@ const MyComponent = () => {
     useEffect(() => {
         setTimeout(() => {
             router.push('/');
-        } , 3000);
+        } , 0);
     }, []);
 
 
