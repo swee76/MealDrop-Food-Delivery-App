@@ -1,11 +1,11 @@
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
-import {signInWithEmailAndPassword} from "firebase/auth";
+import {createUserWithEmailAndPassword, getAuth} from "firebase/auth";
 import {useState} from "react";
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {TextInput, TouchableOpacity, View , StyleSheet , Text} from "react-native";
 import {auth} from "../firebase";
 import {useRouter} from "expo-router";
 
-const Login = () => {
+const Register = () => {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const [singedIn, setSingedIn] = useState(false)
@@ -13,7 +13,7 @@ const Login = () => {
     const router = useRouter();
 
     const handleLogin = () => {
-        signInWithEmailAndPassword(auth, email, password)
+        createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
@@ -31,7 +31,7 @@ const Login = () => {
     return (
         <BasicPageWrapper singedIn={singedIn}>
             <View style={styles.container}>
-                <Text style={styles.title}>Login</Text>
+                <Text style={styles.title}>Register</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
@@ -48,16 +48,16 @@ const Login = () => {
                     secureTextEntry
                 />
                 <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Login</Text>
+                    <Text style={styles.buttonText}>Register</Text>
                 </TouchableOpacity>
                 <View style={{flexDirection: 'row'}}>
                     <Text>Don't have an account?</Text>
                     <TouchableOpacity onPress={() => {
-                        router.push('/register')
+                        router.push('/login')
                     }}
-                    style={{marginLeft: 5}}
+                                      style={{marginLeft: 5}}
                     >
-                        <Text style={styles.redText}>Register</Text>
+                        <Text style={styles.redText}>Login</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -103,4 +103,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Login;
+export default Register;
