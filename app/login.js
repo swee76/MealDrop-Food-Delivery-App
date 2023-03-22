@@ -1,7 +1,7 @@
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import {signInWithEmailAndPassword, getAuth} from "firebase/auth";
 import {useState} from "react";
-import {TextInput, TouchableOpacity, View} from "react-native";
+import {TextInput, TouchableOpacity, View , StyleSheet} from "react-native";
 
 const Login = () => {
     const [email, setEmail] = useState()

@@ -5,7 +5,7 @@ const HomePage = () => (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'} }>
         <Text >Hello World</Text>
         <Link href={'/'}>Home</Link>
-        <Link href={'/profile'}>Profile</Link>
+        <Link href={'/login'}>Login</Link>
     </View>
 );
 
