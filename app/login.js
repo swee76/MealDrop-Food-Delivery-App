@@ -1,14 +1,17 @@
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
-import {signInWithEmailAndPassword, getAuth} from "firebase/auth";
+import {signInWithEmailAndPassword} from "firebase/auth";
 import {useState} from "react";
-import {TextInput, TouchableOpacity, View , StyleSheet} from "react-native";
+import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {auth} from "../firebase";
+import {useRouter} from "expo-router";
 
 const Login = () => {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const [singedIn, setSingedIn] = useState(false)
 
-    const auth = getAuth();
+    const router = useRouter();
+
     const handleLogin = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
@@ -47,6 +50,16 @@ const Login = () => {
                 <TouchableOpacity style={styles.button} onPress={handleLogin}>
                     <Text style={styles.buttonText}>Login</Text>
                 </TouchableOpacity>
+                <View style={{flexDirection: 'row'}}>
+                    <Text>Don't have an account?</Text>
+                    <TouchableOpacity onPress={() => {
+                        router.push('/register')
+                    }}
+                    style={{marginLeft: 5}}
+                    >
+                        <Text style={styles.redText}>Register</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </BasicPageWrapper>
     );
@@ -85,6 +98,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
+    redText: {
+        color: '#FF5A5F',
+    }
 });
 
 export default Login;

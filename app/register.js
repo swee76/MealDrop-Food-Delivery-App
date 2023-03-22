@@ -1,14 +1,17 @@
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import {createUserWithEmailAndPassword, getAuth} from "firebase/auth";
 import {useState} from "react";
-import {TextInput, TouchableOpacity, View , StyleSheet} from "react-native";
+import {TextInput, TouchableOpacity, View , StyleSheet , Text} from "react-native";
+import {auth} from "../firebase";
+import {useRouter} from "expo-router";
 
 const Register = () => {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const [singedIn, setSingedIn] = useState(false)
 
-    const auth = getAuth();
+    const router = useRouter();
+
     const handleLogin = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
@@ -28,7 +31,7 @@ const Register = () => {
     return (
         <BasicPageWrapper singedIn={singedIn}>
             <View style={styles.container}>
-                <Text style={styles.title}>Login</Text>
+                <Text style={styles.title}>Register</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
@@ -47,6 +50,16 @@ const Register = () => {
                 <TouchableOpacity style={styles.button} onPress={handleLogin}>
                     <Text style={styles.buttonText}>Register</Text>
                 </TouchableOpacity>
+                <View style={{flexDirection: 'row'}}>
+                    <Text>Don't have an account?</Text>
+                    <TouchableOpacity onPress={() => {
+                        router.push('/login')
+                    }}
+                                      style={{marginLeft: 5}}
+                    >
+                        <Text style={styles.redText}>Login</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </BasicPageWrapper>
     );
@@ -85,6 +98,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
+    redText: {
+        color: '#FF5A5F',
+    }
 });
 
 export default Register;
