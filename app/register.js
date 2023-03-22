@@ -1,16 +1,16 @@
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
-import {signInWithEmailAndPassword, getAuth} from "firebase/auth";
+import {createUserWithEmailAndPassword, getAuth} from "firebase/auth";
 import {useState} from "react";
 import {TextInput, TouchableOpacity, View} from "react-native";
 
-const Login = () => {
+const Register = () => {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const [singedIn, setSingedIn] = useState(false)
 
     const auth = getAuth();
     const handleLogin = () => {
-        signInWithEmailAndPassword(auth, email, password)
+        createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
@@ -45,7 +45,7 @@ const Login = () => {
                     secureTextEntry
                 />
                 <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Login</Text>
+                    <Text style={styles.buttonText}>Register</Text>
                 </TouchableOpacity>
             </View>
         </BasicPageWrapper>
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Login;
+export default Register;
