@@ -6,7 +6,6 @@ import {auth, database} from "../firebase";
 import {useRouter} from "expo-router";
 import {Picker} from '@react-native-picker/picker';
 import {ref, set} from "firebase/database";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {storeData} from "../storage";
 
 const Register = () => {
