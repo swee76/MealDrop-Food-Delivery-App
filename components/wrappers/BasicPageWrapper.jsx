@@ -1,12 +1,19 @@
 import {View} from "react-native";
 import Header from "../core/Header";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {getData} from "../../storage";
 
 
 const BasicPageWrapper = ({children, singedIn}) => {
 
+    const [user, setUser] = useState(null);
+
     useEffect(() => {
-        console.log('singedIn', singedIn)
+        getData('user').then((user) => {
+            if (user) {
+                setUser(user);
+            }
+        })
     }, [singedIn])
 
     return (
@@ -17,7 +24,7 @@ const BasicPageWrapper = ({children, singedIn}) => {
             alignItems: 'stretch',
             backgroundColor: '#fff',
         }}>
-            <Header/>
+            <Header user={user}/>
             {children}
         </View>
     );
