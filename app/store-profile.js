@@ -9,7 +9,8 @@ const StoreProfile = () => {
             <View>
                 <View style={styles.breadcrumbContainer}>
                     <Link href={'/'} style={styles.goBack}>Go Back</Link>
-                    <TouchableOpacity style={styles.menuItemsButton}>
+                    <TouchableOpacity style={styles.menuItemsButton}
+                                      href={'/add-menu-items'}>
                         <Text style={styles.menuItemsButtonText}>
                             Handle Menu Items
                         </Text>
