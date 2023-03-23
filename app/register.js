@@ -1,31 +1,52 @@
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
-import {createUserWithEmailAndPassword, getAuth} from "firebase/auth";
-import {useState} from "react";
-import {TextInput, TouchableOpacity, View , StyleSheet , Text} from "react-native";
-import {auth} from "../firebase";
+import {createUserWithEmailAndPassword} from "firebase/auth";
+import {useEffect, useState} from "react";
+import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {auth, database} from "../firebase";
 import {useRouter} from "expo-router";
+import {Picker} from '@react-native-picker/picker';
+import {ref, set} from "firebase/database";
 
 const Register = () => {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const [singedIn, setSingedIn] = useState(false)
+    const [type, setType] = useState('')
+
+    const [pickerFocused, setPickerFocused] = useState(false)
 
     const router = useRouter();
 
     const handleLogin = () => {
+        if (!email || !password || !type || type === '') {
+            alert('Please fill all fields')
+            return
+        }
+
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
                 // ...
+                createUser(user.uid)
+                    .then(() => {
+                        setSingedIn(true)
 
-                setSingedIn(true)
+                    })
+
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 // ..
             });
+    }
+
+    const createUser = async (userID) => {
+        await set(ref(database, 'users/' + userID), {
+            email: email,
+            type: type,
+        })
     }
 
     return (
@@ -47,6 +68,22 @@ const Register = () => {
                     value={password}
                     secureTextEntry
                 />
+                <Picker
+                    placeholder={'Select type'}
+                    mode="dropdown"  //android only
+                    selectedValue={type}
+                    style={styles.picker}
+                    onValueChange={(itemValue, itemIndex) => {
+                        setType(itemValue)
+                    }}
+                    onFocus={() => setPickerFocused(true)}
+                    onBlur={() => setPickerFocused(false)}
+                >
+                    <Picker.Item label="Please Select Type" value="" enabled={!pickerFocused}/>
+                    <Picker.Item label="Rider" value="rider"/>
+                    <Picker.Item label="Driver" value="driver"/>
+                </Picker>
+
                 <TouchableOpacity style={styles.button} onPress={handleLogin}>
                     <Text style={styles.buttonText}>Register</Text>
                 </TouchableOpacity>
@@ -54,9 +91,7 @@ const Register = () => {
                     <Text>Don't have an account?</Text>
                     <TouchableOpacity onPress={() => {
                         router.push('/login')
-                    }}
-                                      style={{marginLeft: 5}}
-                    >
+                    }} style={{marginLeft: 5}}>
                         <Text style={styles.redText}>Login</Text>
                     </TouchableOpacity>
                 </View>
@@ -100,6 +135,12 @@ const styles = StyleSheet.create({
     },
     redText: {
         color: '#FF5A5F',
+    },
+    picker: {
+        width: 300,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: "#666",
     }
 });
 
