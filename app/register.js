@@ -6,6 +6,8 @@ import {auth, database} from "../firebase";
 import {useRouter} from "expo-router";
 import {Picker} from '@react-native-picker/picker';
 import {ref, set} from "firebase/database";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {storeData} from "../storage";
 
 const Register = () => {
     const [email, setEmail] = useState()
@@ -29,9 +31,14 @@ const Register = () => {
                 const user = userCredential.user;
                 // ...
                 createUser(user.uid)
-                    .then(() => {
-                        setSingedIn(true)
+                    .then(async () => {
+                         await storeData('user', JSON.stringify({
+                            email: email,
+                            type: type,
+                            id: user.uid
+                        }))
 
+                        setSingedIn(true)
                     })
 
             })
@@ -79,7 +86,7 @@ const Register = () => {
                     onFocus={() => setPickerFocused(true)}
                     onBlur={() => setPickerFocused(false)}
                 >
-                    <Picker.Item label="Please Select Type" value="" enabled={!pickerFocused}/>
+                    <Picker.Item label="Please Select User Type" value="" enabled={!pickerFocused}/>
                     <Picker.Item label="Rider" value="rider"/>
                     <Picker.Item label="Driver" value="driver"/>
                 </Picker>
