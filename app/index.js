@@ -1,5 +1,6 @@
 import {View, Text} from 'react-native';
 import {Link} from "expo-router";
+import Admin from './menuScreen';
 
 const HomePage = () => (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'} }>
@@ -9,6 +10,7 @@ const HomePage = () => (
         <Link href={'/store-profile'}>Manage Store Details</Link>
         <Link href={'/login'}>Login</Link>
         <Link href={'/choose-type'}>Profile Type select</Link>
+        <Link href={'/AdminHome'}>Admin Home</Link>
     </View>
 );
 
