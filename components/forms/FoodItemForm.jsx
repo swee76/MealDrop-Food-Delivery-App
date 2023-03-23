@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {View, Text, TextInput, TouchableOpacity, Alert, StyleSheet} from 'react-native';
-// import image from "react-native-web/src/exports/Image";
 // import {auth} from 'firebase';
 // import firebase from "firebase/compat";
 
