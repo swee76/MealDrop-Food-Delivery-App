@@ -2,7 +2,7 @@ import {initializeApp} from "firebase/app";
 import {getAuth} from "firebase/auth";
 import {getDatabase} from "firebase/database";
 import {getApp , getApps} from "firebase/app";
-
+// import firebase from "firebase/compat";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDjJB5myL0JKZMEeZ6m66VGX1lYsJvvax0",
@@ -22,3 +22,6 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 export const auth = getAuth(app);
 export const database = getDatabase(app);
+
+// Create a Firebase storage reference for food item images
+// const storageRef = firebase.storage().ref('food-items');
