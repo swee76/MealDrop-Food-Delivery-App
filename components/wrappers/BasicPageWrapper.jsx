@@ -12,6 +12,8 @@ const BasicPageWrapper = ({children, singedIn}) => {
         getData('user').then((user) => {
             if (user) {
                 setUser(user);
+            } else {
+                setUser(null);
             }
         })
     }, [singedIn])
