@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import {useEffect, useState} from "react";
 import {onValue, ref, update} from "firebase/database";
@@ -60,11 +60,11 @@ const RiderProfile = () => {
         setLoading(true)
 
         const userData = {
-            name : null,
-            phone : null,
-            city : null,
-            vehicle : null,
-            vehicleNumber : null,
+            name: null,
+            phone: null,
+            city: null,
+            vehicle: null,
+            vehicleNumber: null,
         }
 
 
@@ -73,6 +73,14 @@ const RiderProfile = () => {
                 setTrigger(!trigger)
                 setLoading(false)
             })
+    }
+
+    const goToStoresNearMe = () => {
+        if (city) {
+            router.push('/rider-stores-near-me')
+        } else {
+            Alert.alert('Please set your city first')
+        }
     }
 
     return (
@@ -118,11 +126,21 @@ const RiderProfile = () => {
                 <TouchableOpacity style={{
                     ...styles.greenTouchableOpacity,
                     marginTop: 20,
-                }}
-                                  onPress={deleteProfileData}>
+                }} onPress={deleteProfileData}>
                     <Text style={{color: '#FFF', fontWeight: "bold"}}>{
                         loading ? 'Deleting...' : 'Delete Profile Data'
                     }</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{
+                    ...styles.greenTouchableOpacity,
+                    marginTop: 20,
+                    backgroundColor: `${city ? '#e55259' : '#ccc'}`
+                }}
+                                  onPress={goToStoresNearMe}>
+                    <Text style={{color: '#FFF', fontWeight: "bold"}}>
+                        See Stores Near Me
+                    </Text>
                 </TouchableOpacity>
 
             </View>
