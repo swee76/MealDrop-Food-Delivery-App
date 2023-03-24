@@ -4,13 +4,40 @@ import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import React, {useEffect, useState} from "react";
 import {onValue, ref} from "firebase/database";
 import {database} from "../firebase";
+import {getObject} from "../storage";
 
 const ViewStoreList = () => {
+    const [user, setUser] = useState(null);
+
     const [storeList, setStoreList] = useState([])
 
     useEffect(() => {
-        fetchStores().then((data) => console.log(data))
+        getObject('user')
+            .then((data) => {
+                readUser(data.id)
+                    .then((data) => {
+                        setUser(data)
+                    })
+            })
     }, [])
+
+    const readUser = async (userId) => {
+        const userData = ref(database, 'users/' + userId);
+
+        let user
+
+        onValue(userData, (snapshot) => {
+            user = snapshot.val()
+        })
+
+        return user
+    }
+
+    useEffect(() => {
+        if (user) {
+            fetchStores().then((data) => console.log(data))
+        }
+    }, [user])
 
     const fetchStores = async (storeName) => {
         const storeInfo = ref(database, 'store/' + storeName)
