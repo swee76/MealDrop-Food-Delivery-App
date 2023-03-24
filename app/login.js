@@ -27,8 +27,13 @@ const Login = () => {
                             email: email, type: data.type, id: user.uid
                         })
                             .then(() => {
-                                router.push('/')
                                 setSingedIn(true)
+
+                                if (data.type === 'rider') {
+                                    router.push('/rider-profile')
+                                } else {
+                                    router.push('/')
+                                }
                             })
                     })
             })
