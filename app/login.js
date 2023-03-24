@@ -2,8 +2,10 @@ import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import {signInWithEmailAndPassword} from "firebase/auth";
 import {useState} from "react";
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {auth} from "../firebase";
+import {auth, database} from "../firebase";
 import {useRouter} from "expo-router";
+import {onValue, ref} from "firebase/database";
+import {storeObject} from "../storage";
 
 const Login = () => {
     const [email, setEmail] = useState()
@@ -18,8 +20,17 @@ const Login = () => {
                 // Signed in
                 const user = userCredential.user;
                 // ...
-
-                setSingedIn(true)
+                readUserType(user.uid)
+                    .then((data) => {
+                        setSingedIn(true)
+                        storeObject('user', {
+                            email: email, type: data.type, id: user.uid
+                        })
+                            .then(() => {
+                                router.push('/')
+                                setSingedIn(true)
+                            })
+                    })
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -28,8 +39,20 @@ const Login = () => {
             });
     }
 
-    return (
-        <BasicPageWrapper singedIn={singedIn}>
+
+    const readUserType = async (userId) => {
+        const userData = ref(database, 'users/' + userId);
+
+        let user
+
+        onValue(userData, (snapshot) => {
+            user = snapshot.val()
+        })
+
+        return user
+    }
+
+    return (<BasicPageWrapper singedIn={singedIn}>
             <View style={styles.container}>
                 <Text style={styles.title}>Login</Text>
                 <TextInput
@@ -55,28 +78,21 @@ const Login = () => {
                     <TouchableOpacity onPress={() => {
                         router.push('/register')
                     }}
-                    style={{marginLeft: 5}}
+                                      style={{marginLeft: 5}}
                     >
                         <Text style={styles.redText}>Register</Text>
                     </TouchableOpacity>
                 </View>
             </View>
-        </BasicPageWrapper>
-    );
+        </BasicPageWrapper>);
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-    input: {
+        flex: 1, justifyContent: 'center', alignItems: 'center',
+    }, title: {
+        fontSize: 24, fontWeight: 'bold', marginBottom: 20,
+    }, input: {
         width: '80%',
         borderWidth: 1,
         borderColor: '#ccc',
@@ -85,20 +101,11 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         fontSize: 18,
         marginBottom: 10,
-    },
-    button: {
-        backgroundColor: '#FF5A5F',
-        borderRadius: 4,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        marginBottom: 10,
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    redText: {
+    }, button: {
+        backgroundColor: '#FF5A5F', borderRadius: 4, paddingHorizontal: 20, paddingVertical: 10, marginBottom: 10,
+    }, buttonText: {
+        color: '#fff', fontSize: 18, fontWeight: 'bold',
+    }, redText: {
         color: '#FF5A5F',
     }
 });

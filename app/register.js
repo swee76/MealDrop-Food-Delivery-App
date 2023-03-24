@@ -1,6 +1,6 @@
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import {createUserWithEmailAndPassword} from "firebase/auth";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {auth, database} from "../firebase";
 import {useRouter} from "expo-router";
@@ -30,16 +30,15 @@ const Register = () => {
                 const user = userCredential.user;
                 // ...
                 createUser(user.uid)
-                    .then(async () => {
-                         await storeData('user', JSON.stringify({
-                            email: email,
-                            type: type,
-                            id: user.uid
+                    .then(() => {
+                        storeData('user', JSON.stringify({
+                            email: email, type: type, id: user.uid
                         }))
-
-                        setSingedIn(true)
+                            .then(() => {
+                                router.push('/')
+                                setSingedIn(true)
+                            })
                     })
-
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -50,74 +49,65 @@ const Register = () => {
 
     const createUser = async (userID) => {
         await set(ref(database, 'users/' + userID), {
-            email: email,
-            type: type,
+            email: email, type: type,
         })
     }
 
-    return (
-        <BasicPageWrapper singedIn={singedIn}>
-            <View style={styles.container}>
-                <Text style={styles.title}>Register</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    onChangeText={setEmail}
-                    value={email}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    onChangeText={setPassword}
-                    value={password}
-                    secureTextEntry
-                />
-                <Picker
-                    placeholder={'Select type'}
-                    mode="dropdown"  //android only
-                    selectedValue={type}
-                    style={styles.picker}
-                    onValueChange={(itemValue, itemIndex) => {
-                        setType(itemValue)
-                    }}
-                    onFocus={() => setPickerFocused(true)}
-                    onBlur={() => setPickerFocused(false)}
-                >
-                    <Picker.Item label="Please Select User Type" value="" enabled={!pickerFocused}/>
-                    <Picker.Item label="Rider" value="rider"/>
-                    <Picker.Item label="Driver" value="driver"/>
-                </Picker>
+    return (<BasicPageWrapper singedIn={singedIn}>
+        <View style={styles.container}>
+            <Text style={styles.title}>Register</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Email"
+                onChangeText={setEmail}
+                value={email}
+                keyboardType="email-address"
+                autoCapitalize="none"
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Password"
+                onChangeText={setPassword}
+                value={password}
+                secureTextEntry
+            />
+            <Picker
+                placeholder={'Select type'}
+                mode="dropdown"  //android only
+                selectedValue={type}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) => {
+                    setType(itemValue)
+                }}
+                onFocus={() => setPickerFocused(true)}
+                onBlur={() => setPickerFocused(false)}
+            >
+                <Picker.Item label="Please Select User Type" value="" enabled={!pickerFocused}/>
+                <Picker.Item label="Rider" value="rider"/>
+                <Picker.Item label="Driver" value="driver"/>
+            </Picker>
 
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Register</Text>
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                <Text style={styles.buttonText}>Register</Text>
+            </TouchableOpacity>
+            <View style={{flexDirection: 'row'}}>
+                <Text>Don't have an account?</Text>
+                <TouchableOpacity onPress={() => {
+                    router.push('/login')
+                }} style={{marginLeft: 5}}>
+                    <Text style={styles.redText}>Login</Text>
                 </TouchableOpacity>
-                <View style={{flexDirection: 'row'}}>
-                    <Text>Don't have an account?</Text>
-                    <TouchableOpacity onPress={() => {
-                        router.push('/login')
-                    }} style={{marginLeft: 5}}>
-                        <Text style={styles.redText}>Login</Text>
-                    </TouchableOpacity>
-                </View>
             </View>
-        </BasicPageWrapper>
-    );
+        </View>
+    </BasicPageWrapper>);
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-    input: {
+        flex: 1, justifyContent: 'center', alignItems: 'center',
+    }, title: {
+        fontSize: 24, fontWeight: 'bold', marginBottom: 20,
+    }, input: {
         width: '80%',
         borderWidth: 1,
         borderColor: '#ccc',
@@ -126,27 +116,14 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         fontSize: 18,
         marginBottom: 10,
-    },
-    button: {
-        backgroundColor: '#FF5A5F',
-        borderRadius: 4,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        marginBottom: 10,
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    redText: {
+    }, button: {
+        backgroundColor: '#FF5A5F', borderRadius: 4, paddingHorizontal: 20, paddingVertical: 10, marginBottom: 10,
+    }, buttonText: {
+        color: '#fff', fontSize: 18, fontWeight: 'bold',
+    }, redText: {
         color: '#FF5A5F',
-    },
-    picker: {
-        width: 300,
-        padding: 10,
-        borderWidth: 1,
-        borderColor: "#666",
+    }, picker: {
+        width: 300, padding: 10, borderWidth: 1, borderColor: "#666",
     }
 });
 
