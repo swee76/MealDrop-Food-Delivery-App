@@ -35,12 +35,13 @@ const ViewStoreList = () => {
 
     useEffect(() => {
         if (user) {
-            fetchStores().then((data) => console.log(data))
+            const stores = fetchStores();
+            setStoreList(stores)
         }
     }, [user])
 
-    const fetchStores = async (storeName) => {
-        const storeInfo = ref(database, 'store/' + storeName)
+    const fetchStores = async (storeData) => {
+        const storeInfo = ref(database, 'food-store/' + storeData._queryIdentifier('id'))
 
         let stores;
 
@@ -48,7 +49,7 @@ const ViewStoreList = () => {
             stores = snapshot.val()
         })
 
-        setStoreList(stores)
+        return stores;
     }
 
     const handleEditStoreDetails = (name) => {
@@ -62,12 +63,13 @@ const ViewStoreList = () => {
             </View>
             <View style={styles.container}>
                 <Text style={styles.heading}>~Store List~</Text>
-                {storeList && storeList.map((store) => <View key={store.storeName}> <Text>{store.storeName}</Text>
+                {storeList && storeList.map((store) => <View key={store.id}>
+                    <Text>{store.storeName}</Text>
                     <Text>{store.storeLocation}</Text>
                     <Text>{store.businessHours}</Text>
                     <Text>{store.contactInfo}</Text>
 
-                    <TouchableOpacity style={styles.buttonContainer} onPress={handleEditStoreDetails(store.storeName)}>
+                    <TouchableOpacity style={styles.buttonContainer} onPress={handleEditStoreDetails(store.id)}>
                         <Text style={styles.buttonText}>
                             Edit
                         </Text>
