@@ -86,6 +86,7 @@ const Register = () => {
                 <Picker.Item label="Rider" value="rider"/>
                 <Picker.Item label="Driver" value="driver"/>
                 <Picker.Item label="Customer" value="customer"/>
+                <Picker.Item label="Food Store Owner" value="store-owner"/>
             </Picker>
 
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
