@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
-import {Link} from "expo-router";
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const Cart = () => {
     const [price, setPrice] = useState(10);
@@ -24,28 +21,20 @@ const Cart = () => {
 
     return (
         <BasicPageWrapper>
-            <Link href={'/'} style={styles.goBack}>Go Back</Link>
             <View style={styles.container}>
                 <Text style={styles.title}>Food Item</Text>
-
                 <Text style={styles.price}>${price.toFixed(2)}</Text>
                 <View style={styles.quantityContainer}>
-                    <TouchableOpacity onPress={() => setQuantity(Math.max(quantity - 1, 1))}>
-                        <Icon name="remove-circle-outline" size={36} color="black" />
-                    </TouchableOpacity>
+                    <Button title="-" onPress={() => setQuantity(Math.max(quantity - 1, 1))} />
                     <Text style={styles.quantity}>{quantity}</Text>
-                    <TouchableOpacity onPress={() => setQuantity(quantity + 1)}>
-                        <Icon name="add-circle-outline" size={36} color="black" />
-                    </TouchableOpacity>
+                    <Button title="+" onPress={() => setQuantity(quantity + 1)} />
                 </View>
-                <TouchableOpacity style={styles.button} onPress={addToCart}>
-                <Text style={styles.cartTitle}>Add Cart</Text></TouchableOpacity>
+                <Button title="Add to Cart" onPress={addToCart} />
+                <Text style={styles.cartTitle}>Cart</Text>
                 {cart.map((item, index) => (
                     <Text key={index} style={styles.cartItem}>${item.price.toFixed(2)}</Text>
                 ))}
-                <TouchableOpacity style={styles.button} onPress={clearCart}>
-                    <Text style={styles.cartTitle}>Clear Cart</Text></TouchableOpacity>
-
+                <Button title="Clear Cart" onPress={clearCart} />
             </View>
         </BasicPageWrapper>
     );
@@ -53,6 +42,7 @@ const Cart = () => {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
@@ -76,23 +66,14 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
     },
     cartTitle: {
-        color: '#fff',
-        fontSize: 18,
+        fontSize: 24,
         fontWeight: 'bold',
-        textAlign: 'center',
+        marginTop: 20,
+        marginBottom: 10,
     },
     cartItem: {
         fontSize: 20,
         marginBottom: 5,
-        marginTop:5
-    },
-    button: {
-        backgroundColor: '#FF5A5F',
-        borderRadius: 2,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        minWidth: 100,
-        marginTop:10
     },
 });
 
