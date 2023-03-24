@@ -64,7 +64,6 @@ const UpadateCustomer = () => {
             .then(() => {
                 router.push('/customer-profile')
             })
-        alert("User Information Updated Successfully!!");
     }
 
 
@@ -72,7 +71,7 @@ const UpadateCustomer = () => {
         <BasicPageWrapper>
             <View>
                 <View>
-                    <View style={{alignItems: 'center'}}><Text style={styles.text}>Update Customer Profile</Text></View>
+                    <View style={{alignItems: 'center'}}><Text style={styles.text}>Update Customer</Text></View>
                     <View style={styles.imageContainer}><Image source={require('../assets/customer-profile.jpeg')}
                               style={{width: 200, height: 160, margin: 12, alignItems: 'center',}}/></View>
                     <View style={styles.container}><TextInput
