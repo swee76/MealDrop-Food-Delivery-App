@@ -4,11 +4,8 @@ import {useEffect, useState} from "react";
 import {onValue, ref} from "firebase/database";
 import {database} from "../firebase";
 import {getObject} from "../storage";
-import {useRouter} from "expo-router";
 
-const RiderProfile = () => {
-    const router = useRouter();
-
+const RiderProfileEdit = () => {
     const [user, setUser] = useState(null);
 
     const [name, setName] = useState('')
@@ -60,44 +57,21 @@ const RiderProfile = () => {
             <View style={styles.detailBox}>
                 <Text style={styles.header}>Profile</Text>
 
-                <View style={styles.detailRow}>
-                    <Text style={styles.detailTextTopic}>Name:</Text>
-                    <Text style={styles.detailText}>{name || 'not set'}</Text>
-                </View>
+                <Text style={styles.detailText}>Name: {name}</Text>
+                <Text style={styles.detailText}>Phone: {phone}</Text>
+                <Text style={styles.detailText}>City: {city}</Text>
+                <Text style={styles.detailText}>Vehicle: {vehicle}</Text>
+                <Text style={styles.detailText}>Vehicle Number: {vehicleNumber}</Text>
 
-                <View style={styles.detailRow}>
-                    <Text style={styles.detailTextTopic}>Phone:</Text>
-                    <Text style={styles.detailText}>{phone || 'not set'}</Text>
-                </View>
-
-                <View style={styles.detailRow}>
-                    <Text style={styles.detailTextTopic}>City:</Text>
-                    <Text style={styles.detailText}>{city || 'not set'}</Text>
-                </View>
-
-                <View style={styles.detailRow}>
-                    <Text style={styles.detailTextTopic}>Vehicle:</Text>
-                    <Text style={styles.detailText}>{vehicle || 'not set'}</Text>
-                </View>
-
-                <View style={styles.detailRow}>
-                    <Text style={styles.detailTextTopic}>Vehicle Number:</Text>
-                    <Text style={styles.detailText}>{vehicleNumber || 'not set'}</Text>
-                </View>
-
-                <TouchableOpacity style={styles.greenTouchableOpacity}
-                                  onPress={() => {
-                                      router.push('/rider-profile-edit')
-                                  }}>
-                    <Text style={{color: '#FFF', fontWeight: "bold"}}>Edit Profile</Text>
+                <TouchableOpacity style={styles.greenTouchableOpacity}>
+                    <Text style={{color: '#FFF'}}>Edit Profile</Text>
                 </TouchableOpacity>
-
             </View>
         </BasicPageWrapper>
     )
 }
 
-export default RiderProfile;
+export default RiderProfileEdit;
 
 const styles = StyleSheet.create({
     subHeadingBox: {
@@ -116,34 +90,25 @@ const styles = StyleSheet.create({
     detailBox: {
         backgroundColor: '#FFF',
         margin: 40,
+        padding: 20,
+        paddingHorizontal: 40,
     },
     header: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
     },
-    detailRow: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingBottom: 11,
-    },
-    detailTextTopic: {
+    detailText: {
         fontSize: 16,
         fontWeight: 'bold',
         color: '#000',
     },
-    detailText: {
-        fontSize: 16,
-        color: '#000',
-    },
     greenTouchableOpacity: {
-        marginTop: 50,
         marginHorizontal: 20,
         backgroundColor: '#e55259',
         padding: 10,
         borderRadius: 5,
+        marginTop: 10,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',

@@ -1,12 +1,12 @@
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import {createUserWithEmailAndPassword} from "firebase/auth";
 import {useState} from "react";
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Alert, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {auth, database} from "../firebase";
 import {useRouter} from "expo-router";
 import {Picker} from '@react-native-picker/picker';
 import {ref, set} from "firebase/database";
-import {storeData} from "../storage";
+import {storeData, storeObject} from "../storage";
 
 const Register = () => {
     const [email, setEmail] = useState()
@@ -18,7 +18,11 @@ const Register = () => {
 
     const router = useRouter();
 
+
+    const [loading, setLoading] = useState(false)
     const handleLogin = () => {
+        setLoading(true)
+
         if (!email || !password || !type || type === '') {
             alert('Please fill all fields')
             return
@@ -31,18 +35,28 @@ const Register = () => {
                 // ...
                 createUser(user.uid)
                     .then(() => {
-                        storeData('user', JSON.stringify({
+                        storeObject('user', {
                             email: email, type: type, id: user.uid
-                        }))
+                        })
                             .then(() => {
-                                router.push('/')
                                 setSingedIn(true)
+                                setLoading(false)
+
+                                if (type === 'rider') {
+                                    router.push('/rider-profile')
+                                } else {
+                                    router.push('/')
+
+                                }
+
                             })
                     })
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
+
+                Alert.alert(errorMessage)
                 // ..
             });
     }
@@ -84,13 +98,14 @@ const Register = () => {
             >
                 <Picker.Item label="Please Select User Type" value="" enabled={!pickerFocused}/>
                 <Picker.Item label="Rider" value="rider"/>
-                <Picker.Item label="Driver" value="driver"/>
                 <Picker.Item label="Customer" value="customer"/>
                 <Picker.Item label="Food Store Owner" value="store-owner"/>
             </Picker>
 
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Register</Text>
+                <Text style={styles.buttonText}>
+                    {loading ? 'Loading...' : 'Register'}
+                </Text>
             </TouchableOpacity>
             <View style={{flexDirection: 'row'}}>
                 <Text>Don't have an account?</Text>
@@ -106,9 +121,12 @@ const Register = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, justifyContent: 'center', alignItems: 'center',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     }, title: {
-        fontSize: 24, fontWeight: 'bold', marginBottom: 20,
+        fontSize: 24,
+        fontWeight: 'bold', marginBottom: 20,
     }, input: {
         width: '80%',
         borderWidth: 1,
@@ -119,13 +137,22 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 10,
     }, button: {
-        backgroundColor: '#FF5A5F', borderRadius: 4, paddingHorizontal: 20, paddingVertical: 10, marginBottom: 10,
+        backgroundColor: '#FF5A5F',
+        borderRadius: 4,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        marginBottom: 10,
     }, buttonText: {
-        color: '#fff', fontSize: 18, fontWeight: 'bold',
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
     }, redText: {
         color: '#FF5A5F',
     }, picker: {
-        width: 300, padding: 10, borderWidth: 1, borderColor: "#666",
+        width: 300,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: "#666",
     }
 });
 
