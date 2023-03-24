@@ -1,54 +1,40 @@
-import {Text, View, TextInput, StyleSheet, TouchableOpacity, Image} from "react-native";
+import {Text, View, TextInput, StyleSheet, TouchableOpacity, Image, Alert} from "react-native";
 import React, {useState} from 'react';
-// import firebase from 'firebase';
+import {database} from "../../firebase";
+import {ref, set} from "firebase/database";
+import {useRouter} from "expo-router";
+
 
 const StoreDetailsForm = () => {
+    const router = useRouter();
+
     const [storeName, setStoreName] = useState('');
     const [location, setLocation] = useState('');
     const [businessHours, setBusinessHours] = useState('');
     const [contactInfo, setContactInfo] = useState('');
-    const [isEditMode, setIsEditMode] = useState(false);
 
+    const handleSubmit = () => {
+        const storeInfo = {
+            storeName: storeName,
+            storeLocation: location,
+            businessHours: businessHours,
+            contactInfo: contactInfo
+        }
+        // console.log(storeInfo)
+        setStoreName('')
+        setLocation('')
+        setBusinessHours('')
+        setContactInfo('')
 
-    // useEffect(() => {
-    //     const user = firebase.auth().currentUser;
-    //     firebase.firestore().collection('stores').doc(user.uid).get()
-    //         .then((doc) => {
-    //             if (doc.exists) {
-    //                 const {storeName, location, businessHours, contactInfo} = doc.data();
-    //                 setStoreName(storeName);
-    //                 setLocation(location);
-    //                 setBusinessHours(businessHours);
-    //                 setContactInfo(contactInfo);
-    //             } else {
-    //                 console.log('No store details found for current user.');
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.log('Error fetching store details: ', error);
-    //         });
-    // }, []);
-    //
-    // const handleEditModeToggle = () => {
-    //     setIsEditMode(!isEditMode);
-    // };
-    //
-    // const handleSubmit = () => {
-    //     const user = firebase.auth().currentUser;
-    //     firebase.firestore().collection('stores').doc(user.uid).set({
-    //         storeName,
-    //         location,
-    //         businessHours,
-    //         contactInfo,
-    //     })
-    //         .then(() => {
-    //             console.log('Store details saved successfully!');
-    //             setIsEditMode(false);
-    //         })
-    //         .catch((error) => {
-    //             console.log('Error saving store details: ', error);
-    //         });
-    // };
+        createStore(storeInfo).then(() => Alert.alert("Store added successfully")).catch((error) => {
+            console.error(error)
+        })
+
+    };
+
+    const createStore = async (storeInfo) => {
+        await set(ref(database, 'store/' + storeInfo.storeName), storeInfo)
+    }
 
     return (
         <View style={styles.container}>
@@ -61,33 +47,30 @@ const StoreDetailsForm = () => {
                 placeholder="Store Name"
                 value={storeName}
                 onChangeText={setStoreName}
-                editable={isEditMode}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Location"
                 value={location}
                 onChangeText={setLocation}
-                editable={isEditMode}
+                // editable={isEditMode}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Business Hours"
                 value={businessHours}
                 onChangeText={setBusinessHours}
-                editable={isEditMode}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Contact Information"
                 value={contactInfo}
                 onChangeText={setContactInfo}
-                editable={isEditMode}
             />
 
-            <TouchableOpacity style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.buttonContainer} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>
-                    {isEditMode ? 'Save' : 'Edit'}
+                    Save
                 </Text>
             </TouchableOpacity>
 
@@ -105,7 +88,8 @@ const styles = StyleSheet.create({
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
-            marginVertical: 16
+            marginVertical: 16,
+            position: 'relative',
         },
         heading: {
             fontSize: 24,
