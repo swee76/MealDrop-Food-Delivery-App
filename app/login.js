@@ -20,7 +20,7 @@ const Login = () => {
                 // Signed in
                 const user = userCredential.user;
                 // ...
-                readUserType(user.uid)
+                readUser(user.uid)
                     .then((data) => {
                         setSingedIn(true)
                         storeObject('user', {
@@ -40,7 +40,7 @@ const Login = () => {
     }
 
 
-    const readUserType = async (userId) => {
+    const readUser = async (userId) => {
         const userData = ref(database, 'users/' + userId);
 
         let user
