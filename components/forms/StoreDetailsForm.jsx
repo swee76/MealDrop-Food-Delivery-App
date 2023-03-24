@@ -26,10 +26,7 @@ const StoreDetailsForm = () => {
         setBusinessHours('')
         setContactInfo('')
 
-        createStore(storeInfo).then((storeInfo) => {
-            Alert.alert("Store added successfully");
-            router.push('/view-store-list')
-        }).catch((error) => {
+        createStore(storeInfo).then(() => Alert.alert("Store added successfully")).catch((error) => {
             console.error(error)
         })
 
