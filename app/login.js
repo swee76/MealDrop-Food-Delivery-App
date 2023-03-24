@@ -34,6 +34,8 @@ const Login = () => {
 
                                 if (data.type === 'rider') {
                                     router.push('/rider-profile')
+                                } else if (data.type === 'store-owner') {
+                                    router.push('/store-profile')
                                 } else {
                                     router.push('/')
                                 }
@@ -63,42 +65,42 @@ const Login = () => {
     }
 
     return (<BasicPageWrapper singedIn={singedIn}>
-            <View style={styles.container}>
-                <Text style={styles.title}>Login</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    onChangeText={setEmail}
-                    value={email}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    onChangeText={setPassword}
-                    value={password}
-                    secureTextEntry
-                />
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>
-                        {loading ? 'Loading...' : 'Login'}
+        <View style={styles.container}>
+            <Text style={styles.title}>Login</Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Email"
+                onChangeText={setEmail}
+                value={email}
+                keyboardType="email-address"
+                autoCapitalize="none"
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Password"
+                onChangeText={setPassword}
+                value={password}
+                secureTextEntry
+            />
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                <Text style={styles.buttonText}>
+                    {loading ? 'Loading...' : 'Login'}
+                </Text>
+            </TouchableOpacity>
+            <View style={{flexDirection: 'row'}}>
+                <Text>Don't have an account?</Text>
+                <TouchableOpacity onPress={() => {
+                    router.push('/register')
+                }}
+                                  style={{marginLeft: 5}}
+                >
+                    <Text style={styles.redText}>
+                        Register
                     </Text>
                 </TouchableOpacity>
-                <View style={{flexDirection: 'row'}}>
-                    <Text>Don't have an account?</Text>
-                    <TouchableOpacity onPress={() => {
-                        router.push('/register')
-                    }}
-                                      style={{marginLeft: 5}}
-                    >
-                        <Text style={styles.redText}>
-                            Register
-                        </Text>
-                    </TouchableOpacity>
-                </View>
             </View>
-        </BasicPageWrapper>);
+        </View>
+    </BasicPageWrapper>);
 };
 
 const styles = StyleSheet.create({

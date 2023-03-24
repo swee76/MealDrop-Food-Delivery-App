@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {database} from "../../firebase";
 import {ref, set} from "firebase/database";
 import {useRouter} from "expo-router";
+import uuid from 'react-native-uuid';
 
 
 const StoreDetailsForm = () => {
@@ -15,19 +16,20 @@ const StoreDetailsForm = () => {
 
     const handleSubmit = () => {
         const storeInfo = {
+            id: uuid.v4(),
             storeName: storeName,
             storeLocation: location,
             businessHours: businessHours,
-            contactInfo: contactInfo
+            contactInfo: contactInfo,
+            foodItems: []
         }
-        // console.log(storeInfo)
         setStoreName('')
         setLocation('')
         setBusinessHours('')
         setContactInfo('')
 
-        createStore(storeInfo).then((storeInfo) => {
-            Alert.alert("Store added successfully");
+        createStore(storeInfo).then(() => {
+            // Alert.alert("Store added successfully");
             router.push('/view-store-list')
         }).catch((error) => {
             console.error(error)
@@ -36,7 +38,7 @@ const StoreDetailsForm = () => {
     };
 
     const createStore = async (storeInfo) => {
-        await set(ref(database, 'store/' + storeInfo.storeName), storeInfo)
+        await set(ref(database, 'food-store/' + storeInfo.id), storeInfo)
     }
 
     return (
@@ -56,7 +58,6 @@ const StoreDetailsForm = () => {
                 placeholder="Location"
                 value={location}
                 onChangeText={setLocation}
-                // editable={isEditMode}
             />
             <TextInput
                 style={styles.input}
@@ -76,9 +77,6 @@ const StoreDetailsForm = () => {
                     Save
                 </Text>
             </TouchableOpacity>
-
-            {/*     onPress={handleSubmit}*/}
-            {/*    onPress={handleEditModeToggle}*/}
         </View>
     )
 }
