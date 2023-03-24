@@ -85,6 +85,7 @@ const Register = () => {
                 <Picker.Item label="Please Select User Type" value="" enabled={!pickerFocused}/>
                 <Picker.Item label="Rider" value="rider"/>
                 <Picker.Item label="Driver" value="driver"/>
+                <Picker.Item label="Customer" value="customer"/>
             </Picker>
 
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
