@@ -22,6 +22,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 2,
+        marginTop: 18,
+        marginLeft: 18
     },
     goBack: {
         width: '25%'

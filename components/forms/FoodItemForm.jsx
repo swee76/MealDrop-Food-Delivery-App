@@ -146,7 +146,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     form: {
-        marginVertical: 10,
+        marginTop: 10,
+        marginBottom: 4,
         width: '90%'
     },
     field: {
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 10,
+        marginTop: 8,
         marginBottom: 15,
         width: "90%"
     },
