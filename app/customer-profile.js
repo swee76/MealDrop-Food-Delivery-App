@@ -8,11 +8,11 @@ import {getObject} from "../storage";
 
 const CustomerProfile = () => {
 
-    const [name, setName] = useState(null);
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [Phone, setPhone] = useState(null);
-    const [Address, setAddress] = useState(null);
-    const [City, setCity] = useState(null);
+    const [Phone, setPhone] = useState('');
+    const [Address, setAddress] = useState('');
+    const [City, setCity] = useState('');
 
     const router = useRouter();
 
@@ -20,26 +20,21 @@ const CustomerProfile = () => {
         getObject('user').then((data)=>{
             readUser(data.id).then((user)=>{
                 console.log(user)
+              //  setName(user.name)
                 setEmail(user.email)
-                setName(user.name)
-                setPhone(user.Phone)
-                setAddress(user.Address)
-                setCity(user.City)
             })
         })
         //readUser()
     },[]);
 
     const readUser = async (userId) => {
-        const userData = ref(database, 'users/' + userId,userData);
+        const userData = ref(database, 'users/' + userId);
         let user;
         onValue(userData, (snapshot) => {
             user = snapshot.val();
         });
         return user;
     };
-
-
 
     return (
         <BasicPageWrapper>
@@ -57,24 +52,21 @@ const CustomerProfile = () => {
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.label}>Phone:</Text>
-                    <Text style={styles.value}>{Phone}</Text>
+                    <Text style={styles.value}>(123) 456-7890</Text>
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.label}>Address:</Text>
-                    <Text style={styles.value}>{Address}</Text>
+                    <Text style={styles.value}>123 Main St.</Text>
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.label}>City:</Text>
-                    <Text style={styles.value}>{City}</Text>
+                    <Text style={styles.value}>Anytown</Text>
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={[styles.button, styles.editButton]} onPress={() => {
                         router.push('/update-customer')
                     }}>
                         <Text style={styles.buttonText}>Edit</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, styles.editButton]} >
-                        <Text style={styles.buttonText} >Delete</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={() => {
                         router.push('/')
