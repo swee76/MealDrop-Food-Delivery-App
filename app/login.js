@@ -1,7 +1,7 @@
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import {signInWithEmailAndPassword} from "firebase/auth";
 import {useState} from "react";
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Alert, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {auth, database} from "../firebase";
 import {useRouter} from "expo-router";
 import {onValue, ref} from "firebase/database";
@@ -14,7 +14,10 @@ const Login = () => {
 
     const router = useRouter();
 
+    const [loading, setLoading] = useState(false)
+
     const handleLogin = () => {
+        setLoading(true)
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed in
@@ -41,6 +44,8 @@ const Login = () => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 // ..
+
+                Alert.alert(errorMessage)
             });
     }
 
@@ -85,7 +90,9 @@ const Login = () => {
                     }}
                                       style={{marginLeft: 5}}
                     >
-                        <Text style={styles.redText}>Register</Text>
+                        <Text style={styles.redText}>
+                            {loading ? 'Loading...' : 'Register'}
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -94,9 +101,13 @@ const Login = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, justifyContent: 'center', alignItems: 'center',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     }, title: {
-        fontSize: 24, fontWeight: 'bold', marginBottom: 20,
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
     }, input: {
         width: '80%',
         borderWidth: 1,
@@ -107,9 +118,15 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 10,
     }, button: {
-        backgroundColor: '#FF5A5F', borderRadius: 4, paddingHorizontal: 20, paddingVertical: 10, marginBottom: 10,
+        backgroundColor: '#FF5A5F',
+        borderRadius: 4,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        marginBottom: 10,
     }, buttonText: {
-        color: '#fff', fontSize: 18, fontWeight: 'bold',
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
     }, redText: {
         color: '#FF5A5F',
     }

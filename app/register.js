@@ -1,7 +1,7 @@
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import {createUserWithEmailAndPassword} from "firebase/auth";
 import {useState} from "react";
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Alert, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {auth, database} from "../firebase";
 import {useRouter} from "expo-router";
 import {Picker} from '@react-native-picker/picker';
@@ -55,6 +55,8 @@ const Register = () => {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
+
+                Alert.alert(errorMessage)
                 // ..
             });
     }
