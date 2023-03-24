@@ -81,7 +81,9 @@ const Login = () => {
                     secureTextEntry
                 />
                 <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Login</Text>
+                    <Text style={styles.buttonText}>
+                        {loading ? 'Loading...' : 'Login'}
+                    </Text>
                 </TouchableOpacity>
                 <View style={{flexDirection: 'row'}}>
                     <Text>Don't have an account?</Text>
@@ -91,7 +93,7 @@ const Login = () => {
                                       style={{marginLeft: 5}}
                     >
                         <Text style={styles.redText}>
-                            {loading ? 'Loading...' : 'Register'}
+                            Register
                         </Text>
                     </TouchableOpacity>
                 </View>
