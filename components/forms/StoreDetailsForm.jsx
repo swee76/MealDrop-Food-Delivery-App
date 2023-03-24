@@ -15,26 +15,39 @@ const StoreDetailsForm = () => {
     const [contactInfo, setContactInfo] = useState('');
 
     const handleSubmit = () => {
-        const storeInfo = {
-            id: uuid.v4(),
-            storeName: storeName,
-            storeLocation: location,
-            businessHours: businessHours,
-            contactInfo: contactInfo,
-            foodItems: []
+        const isNumericContact = /^\d+$/.test(contactInfo);
+        const isNumericBusinessHours = /^\d+$/.test(businessHours)
+        const hasTenDigits = /^\d{10}$/.test(contactInfo);
+        const timeValidation = parseFloat(businessHours)
+
+        console.log(isNumericContact && hasTenDigits)
+        if (isNumericContact && hasTenDigits) {
+            if (isNumericBusinessHours && !isNaN(timeValidation) && timeValidation > 0 && timeValidation <= 24) {
+                const storeInfo = {
+                    id: uuid.v4(),
+                    storeName: storeName,
+                    storeLocation: location,
+                    businessHours: businessHours,
+                    contactInfo: contactInfo,
+                }
+                setStoreName('')
+                setLocation('')
+                setBusinessHours('')
+                setContactInfo('')
+
+                createStore(storeInfo).then(() => {
+                    // Alert.alert("Store added successfully");
+                    router.push('/view-store-list')
+                }).catch((error) => {
+                    console.error(error)
+                })
+            } else {
+                Alert.alert("Please Enter Valid hours")
+            }
+
+        } else {
+            Alert.alert("Please Enter Valid contact")
         }
-        setStoreName('')
-        setLocation('')
-        setBusinessHours('')
-        setContactInfo('')
-
-        createStore(storeInfo).then(() => {
-            // Alert.alert("Store added successfully");
-            router.push('/view-store-list')
-        }).catch((error) => {
-            console.error(error)
-        })
-
     };
 
     const createStore = async (storeInfo) => {
