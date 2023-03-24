@@ -55,7 +55,7 @@ const RiderProfile = () => {
     return (
         <BasicPageWrapper>
             <View style={styles.subHeadingBox}>
-                <Text style={styles.subHeadingText}>Rider Profile</Text>
+                <Text style={styles.subHeadingText}>~ Rider Profile ~</Text>
             </View>
             <View style={styles.detailBox}>
                 <Text style={styles.header}>Profile</Text>
