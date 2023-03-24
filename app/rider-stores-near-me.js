@@ -5,6 +5,7 @@ import {onValue, ref} from "firebase/database";
 import {database} from "../firebase";
 import {getObject} from "../storage";
 import {useRouter} from "expo-router";
+import StoreNearMeListItem from "../components/list/StoreNearMeListItem";
 
 const RiderProfile = () => {
     const router = useRouter();
@@ -46,7 +47,7 @@ const RiderProfile = () => {
 
     const [stores, setStores] = useState([])
     const getStoresNearMe = async () => {
-        const storesNearMe = ref(database, 'store/');
+        const storesNearMe = ref(database, 'food-store/');
 
         onValue(storesNearMe, (snapshot) => {
             const data = snapshot.val();
@@ -80,14 +81,14 @@ const RiderProfile = () => {
                     paddingTop: 0,
                     marginTop: 0,
                 }}>{city}</Text>
-
-
+                {stores.map((store, index) => <StoreNearMeListItem store={store} key={index}/>)}
             </View>
         </BasicPageWrapper>
     )
 }
 
 export default RiderProfile;
+
 
 const styles = StyleSheet.create({
     subHeadingBox: {
