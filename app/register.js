@@ -18,7 +18,11 @@ const Register = () => {
 
     const router = useRouter();
 
+
+    const [loading, setLoading] = useState(false)
     const handleLogin = () => {
+        setLoading(true)
+
         if (!email || !password || !type || type === '') {
             alert('Please fill all fields')
             return
@@ -36,6 +40,7 @@ const Register = () => {
                         })
                             .then(() => {
                                 setSingedIn(true)
+                                setLoading(false)
 
                                 if (type === 'rider') {
                                     router.push('/rider-profile')
@@ -91,12 +96,13 @@ const Register = () => {
             >
                 <Picker.Item label="Please Select User Type" value="" enabled={!pickerFocused}/>
                 <Picker.Item label="Rider" value="rider"/>
-                <Picker.Item label="Driver" value="driver"/>
                 <Picker.Item label="Customer" value="customer"/>
             </Picker>
 
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Register</Text>
+                <Text style={styles.buttonText}>
+                    {loading ? 'Loading...' : 'Register'}
+                </Text>
             </TouchableOpacity>
             <View style={{flexDirection: 'row'}}>
                 <Text>Don't have an account?</Text>
