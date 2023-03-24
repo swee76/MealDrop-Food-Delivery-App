@@ -1,23 +1,71 @@
 import {Text, TouchableOpacity, View, StyleSheet, TextInput, Image} from 'react-native';
 import {Link, useRouter} from "expo-router";
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import {onValue, ref, update} from "firebase/database";
+import {database} from "../firebase";
+import {getObject} from "../storage";
 
 const UpadateCustomer = () => {
     const router = useRouter();
+    const [user, setUser] = useState(null);
+    const [userId, setUserId] = useState('')
+
     const [name, setName] = useState('');
-    const [Email, setEmail] = useState('');
     const [Phone, setPhone] = useState('');
     const [Address, setAddress] = useState('');
     const [City, setCity] = useState('');
 
-    const handleSave = () => {
-        console.log(name);
-        console.log(Email);
-        console.log(Phone);
-        console.log(Address);
-        console.log(City);
-    };
+    useEffect(() => {
+        getObject('user')
+            .then((data) => {
+                setUserId(data.id)
+                readUser(data.id)
+                    .then((data) => {
+                        setUser(data)
+                    })
+            })
+    }, [])
+
+    const readUser = async (userId) => {
+        const userData = ref(database, 'users/' + userId);
+
+        let user
+
+        onValue(userData, (snapshot) => {
+            user = snapshot.val()
+        })
+
+        return user
+    }
+
+    useEffect(() => {
+        if (user) {
+            setName(user.name || '')
+            setPhone(user.Phone || '')
+            setAddress(user.Address||'')
+            setCity(user.City || '')
+        }
+    }, [user])
+    const updateUser = async () => {
+
+        if (name === '' || Phone === '' || Address ==='' || City === '') {
+            alert('Please fill all fields')
+            return
+        }
+        const userData = {
+            name,
+            Phone,
+            Address,
+            City,
+
+        }
+        update(ref(database, 'users/' + userId), userData)
+            .then(() => {
+                router.push('/customer-profile')
+            })
+    }
+
 
     return (
         <BasicPageWrapper>
@@ -32,12 +80,6 @@ const UpadateCustomer = () => {
                         value={name}
                         onChangeText={setName}
                     />
-                        <TextInput
-                            style={styles.input}
-                            placeholder="email"
-                            value={Email}
-                            onChangeText={setEmail}
-                        />
                         <TextInput
                             style={styles.input}
                             placeholder="phone"
@@ -57,7 +99,7 @@ const UpadateCustomer = () => {
                             onChangeText={setCity}
                         />
                         <View style={styles.buttonc}>
-                        <TouchableOpacity style={styles.button} onPress={handleSave}>
+                        <TouchableOpacity style={styles.button} onPress={updateUser}>
                             <Text style={styles.buttonText} >Save</Text>
                             </TouchableOpacity>
                         <TouchableOpacity style={styles.button} onPress={() => {
