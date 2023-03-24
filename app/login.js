@@ -15,11 +15,13 @@ const Login = () => {
     const router = useRouter();
 
     const handleLogin = () => {
-        signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
                 // ...
-                readUserType(user.uid).then((data) => {
+                readUser(user.uid)
+                    .then((data) => {
                         setSingedIn(true)
                         storeObject('user', {
                             email: email, type: data.type, id: user.uid
@@ -38,7 +40,7 @@ const Login = () => {
     }
 
 
-    const readUserType = async (userId) => {
+    const readUser = async (userId) => {
         const userData = ref(database, 'users/' + userId);
 
         let user
