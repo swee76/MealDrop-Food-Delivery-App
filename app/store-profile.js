@@ -1,23 +1,23 @@
 import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
-import {Link} from "expo-router";
+import {Link, useRouter} from "expo-router";
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import StoreDetailsForm from "../components/forms/StoreDetailsForm";
 
 const StoreProfile = () => {
+    const router = useRouter();
+
     return (
         <BasicPageWrapper>
-            <View>
-                <View style={styles.breadcrumbContainer}>
-                    <Link href={'/'} style={styles.goBack}>Go Back</Link>
-                    <TouchableOpacity style={styles.menuItemsButton}
-                                      href={'/add-menu-items'}>
-                        <Text style={styles.menuItemsButtonText}>
-                            Handle Menu Items
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <StoreDetailsForm/>
+            <View style={styles.breadcrumbContainer}>
+                <Link href={'/'} style={styles.goBack}>Go Back</Link>
+                <TouchableOpacity style={styles.menuItemsButton}
+                                  onPress={() => router.push('/add-menu-items')}>
+                    <Text style={styles.menuItemsButtonText}>
+                        Handle Menu Items
+                    </Text>
+                </TouchableOpacity>
             </View>
+            <StoreDetailsForm/>
         </BasicPageWrapper>
     )
 }
@@ -33,10 +33,10 @@ const styles = StyleSheet.create({
         margin: 18
     },
     goBack: {
-        width: '15%'
+        width: '25%'
     },
     menuItemsButton: {
-        width: '30%',
+        width: '35%',
         backgroundColor: '#d0a852',
         borderRadius: 16,
     },
