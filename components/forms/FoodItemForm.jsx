@@ -119,7 +119,7 @@ const FoodItemForm = () => {
                     <Text style={styles.imageButton}>Choose image</Text>
                 </TouchableOpacity>
                 {image &&
-                    <Image source={{uri: image.toString()}} style={{width: 200, height: 200}} resizeMode="contain"/>}
+                    <Image source={{uri: image.toString()}} style={{width: 200, height: 200}} contentFit="contain"/>}
 
             </View>
 
@@ -201,5 +201,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: '600',
         fontSize: 16,
+        color:'#fff'
     },
 })

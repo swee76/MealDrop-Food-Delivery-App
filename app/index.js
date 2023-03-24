@@ -3,7 +3,7 @@ import {Link} from "expo-router";
 import Admin from './menuScreen';
 
 const HomePage = () => (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'} }>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Text>Hello World</Text>
         <Link href={'/'}>Home</Link>
         <Link href={'/profile'}>Profile</Link>
@@ -11,6 +11,7 @@ const HomePage = () => (
         <Link href={'/login'}>Login</Link>
         <Link href={'/choose-type'}>Profile Type select</Link>
         <Link href={'/AdminHome'}>Admin Home</Link>
+        <Link href={'/food-menu'}>View Food Menu List</Link>
     </View>
 );
 
