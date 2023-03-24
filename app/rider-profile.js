@@ -1,7 +1,7 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import {useEffect, useState} from "react";
-import {onValue, ref} from "firebase/database";
+import {onValue, ref, update} from "firebase/database";
 import {database} from "../firebase";
 import {getObject} from "../storage";
 import {useRouter} from "expo-router";
@@ -17,17 +17,20 @@ const RiderProfile = () => {
     const [vehicle, setVehicle] = useState('')
     const [vehicleNumber, setVehicleNumber] = useState('')
     const [loading, setLoading] = useState(false)
+    const [userId, setUserId] = useState('')
 
+    const [trigger, setTrigger] = useState(false)
 
     useEffect(() => {
         getObject('user')
             .then((data) => {
+                setUserId(data.id)
                 readUser(data.id)
                     .then((data) => {
                         setUser(data)
                     })
             })
-    }, [])
+    }, [trigger])
 
     const readUser = async (userId) => {
         const userData = ref(database, 'users/' + userId);
@@ -51,6 +54,26 @@ const RiderProfile = () => {
             setVehicleNumber(user.vehicleNumber)
         }
     }, [user])
+
+
+    const deleteProfileData = async () => {
+        setLoading(true)
+
+        const userData = {
+            name : null,
+            phone : null,
+            city : null,
+            vehicle : null,
+            vehicleNumber : null,
+        }
+
+
+        update(ref(database, 'users/' + userId), userData)
+            .then(() => {
+                setTrigger(!trigger)
+                setLoading(false)
+            })
+    }
 
     return (
         <BasicPageWrapper>
@@ -90,6 +113,16 @@ const RiderProfile = () => {
                                       router.push('/rider-profile-edit')
                                   }}>
                     <Text style={{color: '#FFF', fontWeight: "bold"}}>Edit Profile</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{
+                    ...styles.greenTouchableOpacity,
+                    marginTop: 20,
+                }}
+                                  onPress={deleteProfileData}>
+                    <Text style={{color: '#FFF', fontWeight: "bold"}}>{
+                        loading ? 'Deleting...' : 'Delete Profile Data'
+                    }</Text>
                 </TouchableOpacity>
 
             </View>
