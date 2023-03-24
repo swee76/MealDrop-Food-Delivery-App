@@ -1,13 +1,15 @@
 import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import {useEffect, useState} from "react";
-import {onValue, ref} from "firebase/database";
+import {onValue, ref , update , push , child} from "firebase/database";
 import {database} from "../firebase";
 import {getObject} from "../storage";
+import {useRouter} from "expo-router";
 
 const RiderProfileEdit = () => {
     const [user, setUser] = useState(null);
 
+    const [userId, setUserId] = useState('')
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [city, setCity] = useState('')
@@ -16,10 +18,12 @@ const RiderProfileEdit = () => {
 
     const [loading, setLoading] = useState(false)
 
+    const router = useRouter();
 
     useEffect(() => {
         getObject('user')
             .then((data) => {
+                setUserId(data.id)
                 readUser(data.id)
                     .then((data) => {
                         setUser(data)
@@ -60,7 +64,19 @@ const RiderProfileEdit = () => {
             return
         }
 
-        console.log(user.id)
+        const userData = {
+            name,
+            phone,
+            city,
+            vehicle,
+            vehicleNumber
+        }
+
+
+         update(ref(database, 'users/' + userId), userData)
+            .then(() => {
+                router.push('/rider-profile')
+            })
     }
 
     return (
