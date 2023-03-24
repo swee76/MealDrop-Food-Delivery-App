@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
-import {View, Text, TextInput, TouchableOpacity, Alert, StyleSheet} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
+import * as ImagePicker from 'expo-image-picker';
 // import {auth} from 'firebase';
 // import firebase from "firebase/compat";
 
@@ -10,6 +12,8 @@ const FoodItemForm = () => {
     const [price, setPrice] = useState('');
     const [category, setCategory] = useState('');
     const [image, setImage] = useState(null);
+    const [isImageSelected, setIsImageSelected] = useState(false)
+
 
     // const handleSubmit = async () => {
     //     try {
@@ -35,18 +39,34 @@ const FoodItemForm = () => {
     //     }
     // };
     //
-    // const handleChooseImage = async () => {
-    //     let result = await ImagePicker.launchImageLibraryAsync({
-    //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //         allowsEditing: true,
-    //         aspect: [4, 3],
-    //         quality: 1,
-    //     });
-    //
-    //     if (!result.cancelled) {
-    //         setImageUri(result.uri);
-    //     }
-    // };
+    const handleChooseImage = async () => {
+        try {
+            const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            if (status !== 'granted') {
+                alert('Sorry, we need camera roll permissions to make this work!');
+                return;
+            }
+
+            let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 1,
+            });
+
+            console.log(result);
+
+            if (!result.canceled) {
+                setImage(result.assets[0].uri);
+                setIsImageSelected(true)
+                console.log(isImageSelected)
+            } else {
+                setIsImageSelected(false)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
 
     return (
@@ -80,24 +100,28 @@ const FoodItemForm = () => {
                 </View>
                 <View style={styles.field}>
                     <Text style={styles.label}>Category:</Text>
-                    <TextInput
+                    <Picker
                         style={styles.input}
-                        value={category}
-                        onChangeText={(text) => setCategory(text)}
-                    />
+                        selectedValue={category}
+                        onValueChange={(value) => setCategory(value)}
+                    >
+                        <Picker.Item label="Select a category" value=""/>
+                        <Picker.Item label="Appetizer" value="appetizer"/>
+                        <Picker.Item label="Main Course" value="main-course"/>
+                        <Picker.Item label="Dessert" value="dessert"/>
+                        <Picker.Item label="Beverage" value="beverage"/>
+                    </Picker>
                 </View>
             </View>
 
-            <TouchableOpacity style={styles.imagePicker}>
-                {/*onPress={handleChooseImage}*/}
-                <Text style={styles.imageButton}>Choose Image</Text>
-            </TouchableOpacity>
+            <View style={styles.imageContainer}>
+                <TouchableOpacity style={styles.imagePicker} onPress={handleChooseImage}>
+                    <Text style={styles.imageButton}>Choose image</Text>
+                </TouchableOpacity>
+                {image &&
+                    <Image source={{uri: image.toString()}} style={{width: 200, height: 200}} resizeMode="contain"/>}
 
-            {image && (
-                <View style={{marginBottom: 8}}>
-                    <Text style={{fontSize: 16}}>{image.name}</Text>
-                </View>
-            )}
+            </View>
 
             <TouchableOpacity style={styles.buttonContainer}>
                 {/*onpress={handleSubmit}*/}
@@ -114,7 +138,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 16
+        marginVertical: 10
     },
     heading: {
         fontSize: 24,
@@ -122,7 +146,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     form: {
-        marginVertical: 10,
+        marginTop: 10,
+        marginBottom: 4,
         width: '90%'
     },
     field: {
@@ -147,7 +172,18 @@ const styles = StyleSheet.create({
         padding: 8,
         width: '90%',
     },
+    imageContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 8,
+        marginBottom: 15,
+        width: "90%"
+    },
+    imageLabel: {
+        flex: 1,
+    },
     imagePicker: {
+        flex: 2,
         display: 'flex',
         marginVertical: 10
     },

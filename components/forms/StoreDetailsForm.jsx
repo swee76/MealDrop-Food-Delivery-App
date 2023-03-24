@@ -1,5 +1,5 @@
 import {Text, View, TextInput, StyleSheet, TouchableOpacity, Image} from "react-native";
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 // import firebase from 'firebase';
 
 const StoreDetailsForm = () => {
@@ -51,49 +51,48 @@ const StoreDetailsForm = () => {
     // };
 
     return (
-        <View>
-            <View style={styles.container}>
-                <Text style={styles.heading}>~Store Details~</Text>
-                <Image source={require('../../assets/landing-home-phone-new.png')}
-                       style={{width: 200, height: 200, margin: 12}}/>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Store Name"
-                    value={storeName}
-                    onChangeText={setStoreName}
-                    editable={isEditMode}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Location"
-                    value={location}
-                    onChangeText={setLocation}
-                    editable={isEditMode}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Business Hours"
-                    value={businessHours}
-                    onChangeText={setBusinessHours}
-                    editable={isEditMode}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Contact Information"
-                    value={contactInfo}
-                    onChangeText={setContactInfo}
-                    editable={isEditMode}
-                />
+        <View style={styles.container}>
+            <Text style={styles.heading}>~Store Details~</Text>
+            <Image source={require('../../assets/landing-home-phone-new.png')}
+                   style={{width: 200, height: 160, margin: 12}}/>
 
-                <TouchableOpacity style={styles.buttonContainer}>
-                    <Text style={styles.buttonText}>
-                        {isEditMode ? 'Save' : 'Edit'}
-                    </Text>
-                </TouchableOpacity>
+            <TextInput
+                style={styles.input}
+                placeholder="Store Name"
+                value={storeName}
+                onChangeText={setStoreName}
+                editable={isEditMode}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Location"
+                value={location}
+                onChangeText={setLocation}
+                editable={isEditMode}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Business Hours"
+                value={businessHours}
+                onChangeText={setBusinessHours}
+                editable={isEditMode}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Contact Information"
+                value={contactInfo}
+                onChangeText={setContactInfo}
+                editable={isEditMode}
+            />
 
-                {/*     onPress={handleSubmit}*/}
-                {/*    onPress={handleEditModeToggle}*/}
-            </View>
+            <TouchableOpacity style={styles.buttonContainer}>
+                <Text style={styles.buttonText}>
+                    {isEditMode ? 'Save' : 'Edit'}
+                </Text>
+            </TouchableOpacity>
+
+            {/*     onPress={handleSubmit}*/}
+            {/*    onPress={handleEditModeToggle}*/}
         </View>
     )
 }
@@ -125,12 +124,14 @@ const styles = StyleSheet.create({
             width: '90%',
             backgroundColor: '#e7b8ae',
             borderRadius: 5,
+            marginVertical: 10,
         },
         buttonText: {
             padding: 10,
             textAlign: 'center',
             fontWeight: '600',
             fontSize: 16,
+            color: '#fff'
         },
     })
 ;
