@@ -6,7 +6,7 @@ import {auth, database} from "../firebase";
 import {useRouter} from "expo-router";
 import {Picker} from '@react-native-picker/picker';
 import {ref, set} from "firebase/database";
-import {storeData} from "../storage";
+import {storeData, storeObject} from "../storage";
 
 const Register = () => {
     const [email, setEmail] = useState()
@@ -31,9 +31,9 @@ const Register = () => {
                 // ...
                 createUser(user.uid)
                     .then(() => {
-                        storeData('user', JSON.stringify({
+                        storeObject('user', {
                             email: email, type: type, id: user.uid
-                        }))
+                        })
                             .then(() => {
                                 router.push('/')
                                 setSingedIn(true)
@@ -106,9 +106,12 @@ const Register = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, justifyContent: 'center', alignItems: 'center',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     }, title: {
-        fontSize: 24, fontWeight: 'bold', marginBottom: 20,
+        fontSize: 24,
+        fontWeight: 'bold', marginBottom: 20,
     }, input: {
         width: '80%',
         borderWidth: 1,
@@ -119,13 +122,22 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 10,
     }, button: {
-        backgroundColor: '#FF5A5F', borderRadius: 4, paddingHorizontal: 20, paddingVertical: 10, marginBottom: 10,
+        backgroundColor: '#FF5A5F',
+        borderRadius: 4,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        marginBottom: 10,
     }, buttonText: {
-        color: '#fff', fontSize: 18, fontWeight: 'bold',
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
     }, redText: {
         color: '#FF5A5F',
     }, picker: {
-        width: 300, padding: 10, borderWidth: 1, borderColor: "#666",
+        width: 300,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: "#666",
     }
 });
 
