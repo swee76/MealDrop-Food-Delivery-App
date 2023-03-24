@@ -1,22 +1,40 @@
 import {Text, TouchableOpacity, View, StyleSheet, Image} from 'react-native';
 import { Link, useRouter } from "expo-router";
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
-import React from "react";
-import { getDatabase, ref, onValue} from "firebase/database";
+import React, {useEffect, useState} from "react";
+import { ref, onValue} from "firebase/database";
 import {database} from "../firebase";
+import {getObject} from "../storage";
 
 const CustomerProfile = () => {
+
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [Phone, setPhone] = useState('');
+    const [Address, setAddress] = useState('');
+    const [City, setCity] = useState('');
+
     const router = useRouter();
 
-
-    const readUserType = async (userId) => {
-        const userData = ref(database, 'users/' + userId );
-        let user
-        onValue(userData, (snapshot) => {
-            user = snapshot.val()
+    useEffect(()=>{
+        getObject('user').then((data)=>{
+            readUser(data.id).then((user)=>{
+                console.log(user)
+              //  setName(user.name)
+                setEmail(user.email)
+            })
         })
-        return user
-    }
+        //readUser()
+    },[]);
+
+    const readUser = async (userId) => {
+        const userData = ref(database, 'users/' + userId);
+        let user;
+        onValue(userData, (snapshot) => {
+            user = snapshot.val();
+        });
+        return user;
+    };
 
     return (
         <BasicPageWrapper>
@@ -25,12 +43,12 @@ const CustomerProfile = () => {
                 <Image source={require('../assets/landing-home-phone-new.png')}
                        style={{width: 200, height: 160, margin: 12}}/>
                 <View style={styles.row}>
-                    <Text style={styles.label}>Name:</Text>
-                    <Text style={styles.value}>John Doe</Text>
+                    <Text style={styles.label} >Name:</Text>
+                    <Text style={styles.value} >{name}</Text>
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.label}>Email:</Text>
-                    <Text style={styles.value}>john.doe@example.com</Text>
+                    <Text style={styles.value}>{email}</Text>
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.label}>Phone:</Text>
