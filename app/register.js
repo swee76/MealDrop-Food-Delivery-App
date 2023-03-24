@@ -35,8 +35,15 @@ const Register = () => {
                             email: email, type: type, id: user.uid
                         })
                             .then(() => {
-                                router.push('/')
                                 setSingedIn(true)
+
+                                if (type === 'rider') {
+                                    router.push('/rider-profile')
+                                } else {
+                                    router.push('/')
+
+                                }
+
                             })
                     })
             })
