@@ -1,60 +1,37 @@
-import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Link} from "expo-router";
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import React, {useEffect, useState} from "react";
 import {onValue, ref} from "firebase/database";
 import {database} from "../firebase";
 import {getObject} from "../storage";
+import StoreDetailsCard from "../components/list/StoreDetailsCard";
 
 const ViewStoreList = () => {
-    const [user, setUser] = useState(null);
-
     const [storeList, setStoreList] = useState([])
 
     useEffect(() => {
-        getObject('user')
-            .then((data) => {
-                readUser(data.id)
-                    .then((data) => {
-                        setUser(data)
-                    })
-            })
+        fetchStores()
     }, [])
 
-    const readUser = async (userId) => {
-        const userData = ref(database, 'users/' + userId);
+    const fetchStores = async () => {
+        const storeInfo = ref(database, 'food-store/')
 
-        let user
+        onValue(storeInfo, (snapshot) => {
+            const data = snapshot.val()
 
-        onValue(userData, (snapshot) => {
-            user = snapshot.val()
+            const stores = [];
+
+            for (const key in data) {
+                stores.push(data[key])
+            }
+            setStoreList(stores)
         })
-
-        return user
     }
 
     useEffect(() => {
-        if (user) {
-            const stores = fetchStores();
-            setStoreList(stores)
-        }
-    }, [user])
-
-    const fetchStores = async (storeData) => {
-        const storeInfo = ref(database, 'food-store/' + storeData._queryIdentifier('id'))
-
-        let stores;
-
-        onValue(storeInfo, (snapshot) => {
-            stores = snapshot.val()
-        })
-
-        return stores;
-    }
-
-    const handleEditStoreDetails = (name) => {
-
-    }
+        console.log(storeList)
+    }, [storeList])
 
     return (
         <BasicPageWrapper>
@@ -63,17 +40,9 @@ const ViewStoreList = () => {
             </View>
             <View style={styles.container}>
                 <Text style={styles.heading}>~Store List~</Text>
-                {storeList && storeList.map((store) => <View key={store.id}>
-                    <Text>{store.storeName}</Text>
-                    <Text>{store.storeLocation}</Text>
-                    <Text>{store.businessHours}</Text>
-                    <Text>{store.contactInfo}</Text>
-
-                    <TouchableOpacity style={styles.buttonContainer} onPress={handleEditStoreDetails(store.id)}>
-                        <Text style={styles.buttonText}>
-                            Edit
-                        </Text>
-                    </TouchableOpacity></View>)}
+                <ScrollView style={{maxHeight: '200%'}}>
+                    {storeList.map((store, index) => <StoreDetailsCard store={store} key={index}/>)}
+                </ScrollView>
             </View>
         </BasicPageWrapper>
     )
@@ -106,16 +75,17 @@ const styles = StyleSheet.create({
         fontSize: 10,
     },
     container: {
-        flex: 1,
-        alignItems: 'center',
+        display: 'flex',
         justifyContent: 'center',
-        marginVertical: 16,
-        position: 'relative',
+        width: '100%',
+        margin: 16,
     },
     heading: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
+        textAlign: 'center',
+        width: '90%'
     },
     input: {
         borderWidth: 1,
@@ -124,18 +94,5 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
         width: '90%',
-    },
-    buttonContainer: {
-        width: '90%',
-        backgroundColor: '#e7b8ae',
-        borderRadius: 5,
-        marginVertical: 10,
-    },
-    buttonText: {
-        padding: 10,
-        textAlign: 'center',
-        fontWeight: '600',
-        fontSize: 16,
-        color: '#fff'
     },
 })
