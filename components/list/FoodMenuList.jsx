@@ -1,47 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet,Image, ScrollView, TouchableOpacity} from 'react-native';
-// import {Image} from 'expo-image'
+import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Alert} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
-import {onValue, ref} from "firebase/database";
+import {onValue, ref, update} from "firebase/database";
 import {database} from "../../firebase";
 
-const itemsList = [{
-    id: 1,
-    image: "https://thumbs.dreamstime.com/b/bacon-cheese-burger-beef-patty-tomato-onion-pizza-mozzarella-ham-tomatoes-salami-pepper-pepperoni-spices-fresh-basil-123768697.jpg",
-    name: "burger",
-    description: "Order 2 one small chip bucket is free!",
-    category: 'appetizer',
-    price: 1212,
-    isAdded: false
-}, {
-    id: 21,
-    image: "https://www.onmanorama.com/content/dam/mm/en/food/features/images/2021/10/17/pizza.jpg.transform/576x300/image.jpg",
-    name: "pizza",
-    description: "One coke bottle is free!",
-    category: 'main course',
-    price: 812,
-    isAdded: false
-}, {
-    id: 31,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8XLzkU9BrEs2SLWPGXpIDXgfdzzTdngh4QA&usqp=CAU",
-    name: "Foot-long",
-    description: "",
-    category: 'dessert',
-    price: 690,
-    isAdded: false
-}, {
-    id: 41,
-    image: "https://hips.hearstapps.com/hmg-prod/images/drinks-to-avoid-1621959532.jpg?crop=1.00xw:1.00xh;0,0&resize=1200:*",
-    name: "Lemon Juice",
-    description: "",
-    category: 'beverage',
-    price: 590,
-    isAdded: false
-}]
 const FoodMenuList = () => {
     const [menuItems, setMenuItems] = useState([]);
-
 
     useEffect( () => {
         fetchMenuItems()
@@ -62,8 +27,22 @@ const FoodMenuList = () => {
         })
     }
 
-    const handleDeleteMenuItem = (itemID) => {
-        // implement code here
+    const handleDeleteMenuItem = async (itemId) => {
+        const menuItemData ={
+            id:null,
+            description:null,
+            itemCategory: null,
+            itemName: null,
+            pricePerItem: null,
+            uri:null,
+        }
+
+        delete(ref(database, 'food-store/' + itemId), menuItemData)
+            .then(() => {
+                Alert.alert("Deleted Successfully")
+            }).catch((err) => {
+            Alert.alert('Store delete Failed')
+        })
     }
 
     const handleAddToCart = (itemID) => {
@@ -71,12 +50,10 @@ const FoodMenuList = () => {
     }
 
     return (
-        <ScrollView contentContainerStyle={{
-            maxHeight: '300%'
-        }}>
+        <ScrollView contentContainerStyle={{ flexGrow:0 }}>
             <Text style={styles.heading}>~Food Menu~</Text>
             {menuItems.map((item) => <View style={styles.card} key={item.id}>
-                <TouchableOpacity onPress={handleDeleteMenuItem} style={styles.deleteButton}>
+                <TouchableOpacity onPress={()=>handleDeleteMenuItem(item.id)} style={styles.deleteButton}>
                     <MaterialCommunityIcons name="delete-circle-outline" size={32} color="red"/>
                 </TouchableOpacity>
 

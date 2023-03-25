@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, Image, StyleSheet, Alert} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import uuid from "react-native-uuid";
 import {onValue, ref, set} from "firebase/database";
 import {database} from "../../firebase";
 import {useRouter} from "expo-router";
+import { Entypo } from '@expo/vector-icons';
 
 const FoodItemForm = () => {
     const router = useRouter();
@@ -39,6 +40,10 @@ const FoodItemForm = () => {
     }
 
     const handleSubmit = () => {
+        if(name === ''|| description === ''|| price === ''|| category === '' || isImageSelected) {
+            Alert.alert('Please fill all fields')
+        }
+
         const foodItem = {
             id: uuid.v4(),
             itemName: name,
@@ -153,8 +158,14 @@ const FoodItemForm = () => {
                 <TouchableOpacity style={styles.imagePicker} onPress={handleChooseImage}>
                     <Text style={styles.imageButton}>Choose image</Text>
                 </TouchableOpacity>
+
                 {isImageSelected &&
-                    <Image source={{uri: image.toString()}} style={{width: 200, height: 200}} contentFit="contain"/>}
+                    <View>
+                        <TouchableOpacity style={{padding:6}}  onPress={()=>{setImage(null); setIsImageSelected(!isImageSelected)}}>
+                            <Entypo name="cross" size={24} color="black"/>
+                        </TouchableOpacity>
+                        <Image source={{uri: image.toString()}} style={{width: 200, height: 100}} contentFit="contain"/>
+                    </View>}
 
             </View>
 
@@ -169,10 +180,11 @@ export default FoodItemForm;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 10
+        marginTop:5,
+        marginBottom: 10,
+        zIndex:-1
     },
     heading: {
         fontSize: 24,
