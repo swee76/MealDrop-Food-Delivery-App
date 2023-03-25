@@ -1,7 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import {useEffect, useState} from "react";
-import {onValue, ref} from "firebase/database";
+import {child, get, onValue, ref} from "firebase/database";
 import {database} from "../firebase";
 import {getObject} from "../storage";
 import {useRouter} from "expo-router";
@@ -21,7 +21,7 @@ const RiderProfile = () => {
                 readUser(data.id)
                     .then((data) => {
                         setUser(data)
-                        getStoresNearMe()
+                        setCity(data.city)
                     })
             })
     }, [])
@@ -45,6 +45,12 @@ const RiderProfile = () => {
         }
     }, [user])
 
+    useEffect(() => {
+        if (city) {
+            getStoresNearMe()
+        }
+    },[city])
+
     const [stores, setStores] = useState([])
     const getStoresNearMe = async () => {
         const storesNearMe = ref(database, 'food-store/');
@@ -64,11 +70,6 @@ const RiderProfile = () => {
         })
     }
 
-
-    useEffect(() => {
-        console.log(stores)
-    }, [stores])
-
     return (
         <BasicPageWrapper>
             <View style={styles.subHeadingBox}>
@@ -81,7 +82,10 @@ const RiderProfile = () => {
                     paddingTop: 0,
                     marginTop: 0,
                 }}>{city}</Text>
-                {stores.map((store, index) => <StoreNearMeListItem store={store} key={index}/>)}
+                {stores.length > 0 && <>
+                    {stores.map((store, index) => <StoreNearMeListItem store={store} key={index}/>)}
+                </>}
+
             </View>
         </BasicPageWrapper>
     )
