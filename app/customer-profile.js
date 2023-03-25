@@ -79,8 +79,8 @@ const CustomerProfile = () => {
         <BasicPageWrapper>
             <View style={styles.container}>
                 <Text style={styles.heading}>User Details</Text>
-                <Image source={require('../assets/landing-home-phone-new.png')}
-                       style={{width: 200, height: 160, margin: 12}}/>
+                <Image source={require('../assets/eat.png')}
+                       style={{width: 180, height: 140, margin: 12}}/>
                 <View style={styles.row}>
                     <Text style={styles.label} >Name:</Text>
                     <Text style={styles.value} >{name}</Text>
