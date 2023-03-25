@@ -13,13 +13,14 @@ const StoreDetailsCard = ({store}) => {
 
     const handleDelete = async () => {
         const storeData = {
+            id:null,
             storeName: null,
             storeLocation: null,
             businessHours: null,
             contactInfo: null,
         }
 
-        update(ref(database, 'food-store/' + store.id), storeData)
+        delete(ref(database, 'food-store/' + store.id), storeData)
             .then(() => {
                 Alert.alert("Deleted Successfully")
             }).catch((err) => {

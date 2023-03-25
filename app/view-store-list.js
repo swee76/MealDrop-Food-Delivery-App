@@ -35,7 +35,7 @@ const ViewStoreList = () => {
             </View>
             <View style={styles.container}>
                 <Text style={styles.heading}>~Store List~</Text>
-                <ScrollView contentContainerStyle={{overflow: 'scroll'}}>
+                <ScrollView contentContainerStyle={{ flexGrow:0 }}>
                     {storeList.map((store, index) => <StoreDetailsCard store={store} key={index}/>)}
                 </ScrollView>
             </View>
