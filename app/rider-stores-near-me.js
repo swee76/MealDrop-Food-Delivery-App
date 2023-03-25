@@ -1,14 +1,12 @@
 import {StyleSheet, Text, View} from 'react-native';
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import {useEffect, useState} from "react";
-import {child, get, onValue, ref} from "firebase/database";
+import {onValue, ref} from "firebase/database";
 import {database} from "../firebase";
 import {getObject} from "../storage";
-import {useRouter} from "expo-router";
 import StoreNearMeListItem from "../components/list/StoreNearMeListItem";
 
 const RiderProfile = () => {
-    const router = useRouter();
 
     const [user, setUser] = useState(null);
 
