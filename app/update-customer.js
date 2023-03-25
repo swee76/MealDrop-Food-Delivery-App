@@ -99,14 +99,14 @@ const UpadateCustomer = () => {
                             value={City}
                             onChangeText={setCity}
                         />
-                        <View style={styles.buttonc}>
+                        <View style={styles.buttonSave}>
                         <TouchableOpacity style={styles.button} onPress={updateUser}>
-                            <Text style={styles.buttonText} >Save</Text>
+                            <Text style={styles.buttontext} >Save</Text>
                             </TouchableOpacity>
                         <TouchableOpacity style={styles.button} onPress={() => {
                             router.push('/customer-profile')
                         }}>
-                            <Text style={styles.buttonText}>Back</Text>
+                            <Text style={styles.buttontext}>Back</Text>
                         </TouchableOpacity></View>
                     </View>
                 </View>
@@ -157,12 +157,12 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         alignContent:'center'
     },
-    buttonText: {
+    buttontext: {
         color: '#fff',
         fontSize: 18,
         fontWeight: 'bold',
     },
-    buttonc: {
+    buttonSave: {
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
