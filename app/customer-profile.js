@@ -2,7 +2,7 @@ import {Text, TouchableOpacity, View, StyleSheet, Image} from 'react-native';
 import { Link, useRouter } from "expo-router";
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import React, {useEffect, useState} from "react";
-import { ref, onValue} from "firebase/database";
+import {ref, onValue, update} from "firebase/database";
 import {database} from "../firebase";
 import {getObject} from "../storage";
 
@@ -13,6 +13,10 @@ const CustomerProfile = () => {
     const [Phone, setPhone] = useState(null);
     const [Address, setAddress] = useState(null);
     const [City, setCity] = useState(null);
+    const [user, setUser] = useState(null);
+    const [trigger, setTrigger] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [userId, setUserId] = useState('')
 
     const router = useRouter();
 
@@ -40,6 +44,36 @@ const CustomerProfile = () => {
     };
 
 
+    useEffect(() => {
+        getObject('user')
+            .then((data) => {
+                setUserId(data.id)
+                readUser(data.id)
+                    .then((user) => {
+                        setUser(user)
+                    })
+            })
+    }, [])
+    const deleteCustomer = async () => {
+        setLoading(true)
+
+        const userData = {
+            name: null,
+            Phone: null,
+            City: null,
+            Address:null
+
+        }
+
+
+        update(ref(database, 'users/' + userId), userData)
+            .then(() => {
+                setTrigger(!trigger)
+                setLoading(false)
+                router.push('/update-customer')
+            })
+        alert("User Information Deleted Successfully!!");
+    }
 
     return (
         <BasicPageWrapper>
@@ -73,7 +107,7 @@ const CustomerProfile = () => {
                     }}>
                         <Text style={styles.buttonText}>Edit</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, styles.editButton]} >
+                    <TouchableOpacity style={[styles.button, styles.editButton]} onPress={deleteCustomer} >
                         <Text style={styles.buttonText} >Delete</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={() => {
