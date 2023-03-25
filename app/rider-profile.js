@@ -112,12 +112,12 @@ console.log(photo)
 
     useEffect(() => {
         if (imageCaptured) {
+            uploadImageAsync(image)
 
-
-            const blob = new Blob([image], {type: 'image/jpeg'})
-            uploadImage(blob)
         }
     }, [image, imageCaptured])
+
+
 
 
     const uploadImage = async (blob) => {
@@ -138,6 +138,25 @@ console.log(photo)
 
         });
     }
+
+
+    const uploadImageAsync = async uri => {
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+                console.log(e);
+                reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob"
+            xhr.open("GET", uri, true);
+            xhr.send(null);
+        });
+
+        uploadImage(blob)
+    };
 
     return (
         <BasicPageWrapper>
