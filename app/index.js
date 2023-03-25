@@ -13,6 +13,7 @@ const HomePage = () => (
         <Link href={'/AdminHome'}>Admin Home</Link>
         <Link href={'/customer-profile'}>Customer Details</Link>
         <Link href={'/cart'}>Food Cart</Link>
+        <Link href={'/customer-menu'}>search menu</Link>
     </View>
 );
 
