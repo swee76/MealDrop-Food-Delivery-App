@@ -55,7 +55,7 @@ const OwnerList = () => {
     const [singedIn, setSingedIn] = useState(false)
   return (
     <BasicPageWrapper singedIn={singedIn}>
-        <Link href={'/AdminHome'}>Go back</Link>
+        <Link href={'/adminhome'}>Go back</Link>
     <FlatList
       data={storeOwners}
       keyExtractor={(item) => item.id.toString()}
