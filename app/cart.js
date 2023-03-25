@@ -25,17 +25,16 @@ const Cart = () => {
     return (
         <BasicPageWrapper>
             <View>
-                <Text style={styles.title}>Food Item</Text>
+                <Text style={styles.title}>                 Food Cart</Text>
                 <Image source={require('../assets/cart.png')}
                        style={{width: 250, height: 200, margin: 20, marginLeft:20,resizeMode: 'contain'}}/>
-                <View style={styles.btnm}><Text style={styles.price}>${price.toFixed(2)}</Text>
+                <View style={styles.btnm}>
+                    <Text style={styles.price}>${price.toFixed(2)}</Text>
                     <View style={styles.quantityContainer}>
                         <TouchableOpacity onPress={() => setQuantity(Math.max(quantity - 1,1))}>
                             <MaterialIcons name="remove" size={24} color="black"/>
                         </TouchableOpacity>
                         <Text style={styles.quantity}>{quantity}</Text>
-
-
                         <TouchableOpacity onPress={() => setQuantity(quantity + 1)}>
                             <MaterialIcons name="add" size={24} color="black"/>
                         </TouchableOpacity>
@@ -45,7 +44,7 @@ const Cart = () => {
                     <TouchableOpacity style={[styles.buttonx, styles.editButton]} onPress={addToCart}>
                         <Text style={styles.buttonText}>Add Cart</Text>
                     </TouchableOpacity>
-                <Text style={styles.cartTitle}>Cart Items</Text>
+                <Text style={styles.cartTitle}>                          Cart Items</Text>
                 {cart.map((item, index) => (
                     <Text key={index} style={styles.cartItem}>${item.price.toFixed(2)}</Text>
                 ))}
@@ -73,6 +72,7 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontWeight: 'bold',
         marginBottom: 10,
+        alignContent:'center'
     },
     price: {
         fontSize: 24,
@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     btnm:{
 
         flexDirection:'row',
+        justifyContent:'space-evenly',
 
     },
     new:{
