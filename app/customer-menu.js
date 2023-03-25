@@ -6,14 +6,14 @@ import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 const CustomerMenu = () => {
   const router = useRouter();
   const [cartItems, setCartItems] = useState([
-    { id: '1', name: 'Mexican Food', price: 10 },
-    { id: '2', name: 'Eat and Meat', price: 20 },
-    { id: '3', name: 'Pizza Pit', price: 30 },
-    { id: '4', name: 'Thai Tanic', price: 40 },
-    { id: '5', name: 'Fry Nation', price: 50 },
-    { id: '6', name: 'Diner On Sixth', price: 30 },
-    { id: '7', name: 'Green Cabin', price: 40 },
-    { id: '8', name: 'Coffee Bean', price: 50 },
+    { id: '1', name: 'Mexican Food', price: 110 },
+    { id: '2', name: 'Eat and Meat', price: 232 },
+    { id: '3', name: 'Pizza Pit', price: 103 },
+    { id: '4', name: 'Thai Tanic', price: 400 },
+    { id: '5', name: 'Fry Nation', price: 54 },
+    { id: '6', name: 'Diner On Sixth', price: 37 },
+    { id: '7', name: 'Green Cabin', price: 49 },
+    { id: '8', name: 'Coffee Bean', price: 99 },
   ]);
 
   const [searchQuery, setSearchQuery] = useState('');
