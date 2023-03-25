@@ -1,13 +1,20 @@
-import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {onValue, ref, update} from "firebase/database";
-import {database} from "../firebase";
+import {getDownloadURL, ref as storageRef, uploadBytes} from "firebase/storage";
+import {database, storage} from "../firebase";
 import {getObject} from "../storage";
 import {useRouter} from "expo-router";
+import {Camera, CameraType} from 'expo-camera';
 
 const RiderProfile = () => {
     const router = useRouter();
+    const cameraRef = useRef(null)
+
+    const FALLBACK_IMAGE = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
+    const [type, setType] = useState(CameraType.front);
+    const [permission, requestPermission] = Camera.useCameraPermissions();
 
     const [user, setUser] = useState(null);
 
@@ -18,8 +25,10 @@ const RiderProfile = () => {
     const [vehicleNumber, setVehicleNumber] = useState('')
     const [loading, setLoading] = useState(false)
     const [userId, setUserId] = useState('')
-
+    const [image, setImage] = useState(FALLBACK_IMAGE)
     const [trigger, setTrigger] = useState(false)
+    const [openCamera, setOpenCamera] = useState(false)
+
 
     useEffect(() => {
         getObject('user')
@@ -52,6 +61,7 @@ const RiderProfile = () => {
             setCity(user.city)
             setVehicle(user.vehicle)
             setVehicleNumber(user.vehicleNumber)
+            setImage(user.image || FALLBACK_IMAGE)
         }
     }, [user])
 
@@ -65,6 +75,7 @@ const RiderProfile = () => {
             city: null,
             vehicle: null,
             vehicleNumber: null,
+            image: null
         }
 
 
@@ -83,6 +94,70 @@ const RiderProfile = () => {
         }
     }
 
+
+    const editImage = () => {
+        setOpenCamera(true)
+    }
+
+
+    const [imageCaptured, setImageCaptured] = useState(false)
+    const snapPhoto = async () => {
+        const photo = await cameraRef.current.takePictureAsync();
+console.log(photo)
+
+        setImage(photo.uri)
+        setOpenCamera(false)
+        setImageCaptured(true)
+    }
+
+    useEffect(() => {
+        if (imageCaptured) {
+            uploadImageAsync(image)
+
+        }
+    }, [image, imageCaptured])
+
+
+
+
+    const uploadImage = async (blob) => {
+        const imageRef = storageRef(storage, 'images/' + userId + '.jpg');
+
+        uploadBytes(imageRef, blob).then((snapshot) => {
+
+            getDownloadURL(imageRef).then((url) => {
+                console.log('File available at', url)
+
+                update(ref(database, 'users/' + userId), {
+                    image: url
+                }).then(() => {
+                    setImageCaptured(false)
+                    Alert.alert('Image uploaded successfully')
+                })
+            })
+
+        });
+    }
+
+
+    const uploadImageAsync = async uri => {
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+                console.log(e);
+                reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob"
+            xhr.open("GET", uri, true);
+            xhr.send(null);
+        });
+
+        uploadImage(blob)
+    };
+
     return (
         <BasicPageWrapper>
             <View style={styles.subHeadingBox}>
@@ -90,6 +165,29 @@ const RiderProfile = () => {
             </View>
             <View style={styles.detailBox}>
                 <Text style={styles.header}>Profile</Text>
+
+                <View style={styles.detailRow}>
+                    <Text style={styles.detailTextTopic}>Image:</Text>
+                    {openCamera ? <View style={styles.container}>
+                        <Camera
+                            ratio={'1:1'}
+                            ref={cameraRef}
+                            style={styles.camera} type={type}>
+                            <TouchableOpacity onPress={snapPhoto}>
+                                <Text style={styles.text}> Snap </Text>
+                            </TouchableOpacity>
+                        </Camera>
+                    </View> : <TouchableOpacity
+                        style={{
+                            transform: [
+                                {scaleX: -1}
+                            ]
+                        }}
+                        onPress={editImage}>
+                        <Image source={{uri: image}} style={{width: 100, height: 100,}}/>
+                    </TouchableOpacity>}
+
+                </View>
 
                 <View style={styles.detailRow}>
                     <Text style={styles.detailTextTopic}>Name:</Text>
@@ -151,6 +249,30 @@ const RiderProfile = () => {
 export default RiderProfile;
 
 const styles = StyleSheet.create({
+    container: {
+        justifyContent: 'center',
+        height: 100,
+        width: 100,
+    },
+    camera: {
+        flex: 1,
+    },
+    buttonContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        backgroundColor: 'transparent',
+        margin: 64,
+    },
+    button: {
+        flex: 1,
+        alignSelf: 'flex-end',
+        alignItems: 'center',
+    },
+    text: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: 'white',
+    },
     subHeadingBox: {
         backgroundColor: '#e55259',
         padding: 10,
