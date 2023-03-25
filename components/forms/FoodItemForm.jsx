@@ -19,8 +19,8 @@ const FoodItemForm = () => {
     const [storeName, setStoreName] = useState('');
     const [storeList, setStoreList] = useState([])
 
-    useEffect(() => {
-        fetchStores()
+    useEffect(async () => {
+        await fetchStores()
     }, [])
 
     const fetchStores = async () => {
@@ -61,33 +61,9 @@ const FoodItemForm = () => {
     }
 
     const createStore = async (foodItem) => {
-        await set(ref(database, `food-store/${storeName}/food-items/` + foodItem.id), foodItem)
+        await set(ref(database, `food-store/food-items/` + foodItem.id), foodItem)
     }
 
-    // const handleSubmit = async () => {
-    //     try {
-    //         const user = auth.currentUser;
-    //         const {uid} = user;
-    //         const db = firebase.firestore();
-    //         const storageRef = firebase.storage().ref();
-    //         const imageRef = storageRef.child(`images/${uid}/${image.name}`);
-    //         await imageRef.put(image);
-    //         const imageUrl = await imageRef.getDownloadURL();
-    //         await db.collection('foodMenuItems').add({
-    //             name,
-    //             description,
-    //             price,
-    //             category,
-    //             imageUrl,
-    //             ownerId: uid,
-    //         });
-    //         Alert.alert('Success', 'Food menu item created successfully');
-    //         navigation.goBack();
-    //     } catch (error) {
-    //         Alert.alert('Error', error.message);
-    //     }
-    // };
-    //
     const handleChooseImage = async () => {
         try {
             const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -106,7 +82,6 @@ const FoodItemForm = () => {
             if (!result.canceled) {
                 setImage(result.assets[0].uri);
                 setIsImageSelected(true)
-                console.log(isImageSelected)
             } else {
                 setIsImageSelected(false)
             }
@@ -117,7 +92,7 @@ const FoodItemForm = () => {
 
 
     return (
-        <ScrollView contentContainerStyle={{maxHeight: '300%'}}>
+        <View style={styles.container}>
             <Text style={styles.heading}>~Add Food Menu Item~</Text>
             <View style={styles.form}>
                 <View style={styles.field}>
@@ -178,26 +153,26 @@ const FoodItemForm = () => {
                     <Text style={styles.imageButton}>Choose image</Text>
                 </TouchableOpacity>
                 {image &&
-                    <Image source={{uri: image.toString()}} style={{width: 200, height: 200}} contentFit="contain"/>}
+                    <Image source={{uri: image}} style={{width: 200, height: 200}} contentFit="contain"/>}
 
             </View>
 
             <TouchableOpacity style={styles.buttonContainer} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Create Food Menu Item</Text>
             </TouchableOpacity>
-        </ScrollView>
+        </View>
     );
 }
 
 export default FoodItemForm;
 
 const styles = StyleSheet.create({
-    // container: {
-    //     flex: 1,
-    //     alignItems: 'center',
-    //     justifyContent: 'center',
-    //     marginVertical: 10
-    // },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 10
+    },
     heading: {
         fontSize: 24,
         fontWeight: 'bold',

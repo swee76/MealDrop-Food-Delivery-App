@@ -1,6 +1,6 @@
 import {Text, TouchableOpacity, View, StyleSheet, Alert, TextInput} from "react-native";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {onValue, ref, update} from "firebase/database";
 import {database} from "../../firebase";
 
@@ -9,6 +9,7 @@ const StoreDetailsCard = ({store}) => {
     const [newLocation, setNewLocation] = useState('');
     const [newBusinessHours, setNewBusinessHours] = useState('');
     const [newContactInfo, setNewContactInfo] = useState('');
+
     const [isEditMode, setIsEditMode] = useState(false);
 
     const handleEditStoreDetails = async (id) => {
@@ -48,6 +49,32 @@ const StoreDetailsCard = ({store}) => {
 
     }
 
+    const handleEdit = () => {
+        if (isEditMode) {
+            if (newLocation === '' || newBusinessHours === '' || newContactInfo === '') {
+                Alert.alert("Please set all the fields")
+                return
+            }
+
+            const storeData = {
+                location: newLocation,
+                businessHours: newBusinessHours,
+                contactInfo: newContactInfo,
+            }
+
+            update(ref(database, 'food-store/' + store.id), storeData)
+                .then(() => {
+                    setIsEditMode(false)
+                    Alert.alert('Store updated Successfully')
+                })
+                .catch((err) => {
+                    Alert.alert('Store update Failed')
+                })
+        } else {
+            setIsEditMode(true)
+        }
+    }
+
     return (
         <View key={store.id} style={styles.container}>
             <View style={styles.headerWrapper}>
@@ -59,25 +86,58 @@ const StoreDetailsCard = ({store}) => {
 
             <View style={styles.field}>
                 <Text>{'\u2022'} Store Location:</Text>
-                <TextInput style={styles.data} value={isEditMode ? newLocation : store.storeLocation}
-                           onChangeText={(text) => setNewLocation(text)} editable={isEditMode}/>
-            </View>
-            <View style={styles.field}>
-                <Text>{'\u2022'} Business Hours:</Text>
-                <TextInput style={styles.data} value={isEditMode ? newBusinessHours : store.businessHours}
-                           onChangeText={(text) => setNewBusinessHours(text)} editable={isEditMode}/>
-            </View>
-            <View style={styles.field}>
-                <Text>{'\u2022'} Contact Info:</Text>
-                <TextInput style={styles.data} value={isEditMode ? newContactInfo : store.contactInfo}
-                           onChangeText={(text) => setNewContactInfo(text)} editable={isEditMode}/>
+                <View style={{
+                    width: '60%',
+                    paddingRight: 10,
+                    marginLeft: 10,
+                }}>
+                    {isEditMode ? <TextInput
+                            placeholder={store.storeLocation || 'Location'}
+                            style={styles.input} value={newLocation}
+                            onChangeText={setNewLocation}/> :
+                        <Text style={styles.field}>{store.storeLocation}</Text>
+                    }
+                </View>
             </View>
 
-            <TouchableOpacity style={styles.buttonContainer} onPress={() => handleEditStoreDetails(store.id)}>
+            <View style={styles.field}>
+                <Text>{'\u2022'} Business Hours:</Text>
+                <View style={{
+                    width: '60%',
+                    paddingRight: 10,
+                    marginLeft: 10,
+                }}>
+                    {isEditMode ? <TextInput
+                            placeholder={store.businessHours || 'Business Hours'}
+                            style={styles.input} value={newBusinessHours}
+                            onChangeText={setNewBusinessHours}/> :
+                        <Text style={styles.field}>{store.businessHours}</Text>
+                    }
+                </View>
+            </View>
+
+            <View style={styles.field}>
+                <Text>{'\u2022'} Contact Info:</Text>
+                <View style={{
+                    width: '60%',
+                    paddingRight: 10,
+                    marginLeft: 10,
+                }}>
+                    {isEditMode ? <TextInput
+                            placeholder={store.contactInfo || 'Contact Info'}
+                            style={styles.input} value={newContactInfo}
+                            onChangeText={setNewContactInfo}/> :
+                        <Text style={styles.field}>{store.contactInfo}</Text>
+                    }
+                </View>
+            </View>
+
+            <TouchableOpacity style={styles.buttonContainer} onPress={handleEdit}>
                 <Text style={styles.buttonText}>
                     {isEditMode ? 'Save' : 'Edit'}
                 </Text>
-            </TouchableOpacity></View>
+            </TouchableOpacity>
+        </View>
         // onPress={handleEditStoreDetails}
     )
 }
@@ -85,6 +145,16 @@ const StoreDetailsCard = ({store}) => {
 export default StoreDetailsCard;
 
 const styles = StyleSheet.create({
+    input: {
+        width: '100%',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 4,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        fontSize: 18,
+        marginBottom: 10,
+    },
     container: {
         marginVertical: 16,
         position: 'relative',
