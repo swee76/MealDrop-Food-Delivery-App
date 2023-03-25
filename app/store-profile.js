@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 2,
-        margin: 18
+        margin: 18,
+        position: 'relative'
     },
     goBack: {
         width: '25%'
