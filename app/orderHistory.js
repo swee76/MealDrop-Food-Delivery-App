@@ -39,7 +39,7 @@ const orderHistory = () => {
 
     return (
         <BasicPageWrapper singedIn={singedIn}>
-            <Link href={'/AdminHome'}>Go back</Link>
+            <Link href={'/adminhome'}>Go back</Link>
             <View style={styles.container}>
       <Text style={styles.header}>Order History</Text>
       <View>
