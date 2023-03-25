@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
-import {Image} from 'expo-image'
+import {View, Text, StyleSheet,Image, ScrollView, TouchableOpacity} from 'react-native';
+// import {Image} from 'expo-image'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {onValue, ref} from "firebase/database";
@@ -40,37 +40,15 @@ const itemsList = [{
     isAdded: false
 }]
 const FoodMenuList = () => {
-    const [storeList, setStoreList] = useState([])
     const [menuItems, setMenuItems] = useState([]);
 
-    useEffect(async () => {
-        await fetchStores();
+
+    useEffect( () => {
+        fetchMenuItems()
     }, []);
 
-    useEffect(async () => {
-        await storeList.forEach(item =>
-            fetchMenuItems(item.storeName)
-        )
-    }, [storeList]);
-
-
-    const fetchStores = async () => {
-        const storeInfo = ref(database, 'food-store/')
-
-        onValue(storeInfo, (snapshot) => {
-            const data = snapshot.val()
-
-            const stores = [];
-
-            for (const key in data) {
-                stores.push(data[key])
-            }
-            setStoreList(stores)
-        })
-    }
-
-    const fetchMenuItems = async (storeName) => {
-        const foodItemInfo = ref(database, `food-store/${storeName}/food-items/`)
+    const fetchMenuItems = async () => {
+        const foodItemInfo = ref(database, 'food-items/')
 
         onValue(foodItemInfo, snapshot => {
             const data = snapshot.val()
@@ -98,20 +76,20 @@ const FoodMenuList = () => {
         }}>
             <Text style={styles.heading}>~Food Menu~</Text>
             {menuItems.map((item) => <View style={styles.card} key={item.id}>
-                <TouchableOpacity onPress={() => handleDeleteMenuItem(item.id)} style={styles.deleteButton}>
+                <TouchableOpacity onPress={handleDeleteMenuItem} style={styles.deleteButton}>
                     <MaterialCommunityIcons name="delete-circle-outline" size={32} color="red"/>
                 </TouchableOpacity>
 
-                {item.image && <Image source={{uri: item.image.toString()}} style={{width: '100%', height: 200}}/>}
+                {item.uri && <Image source={{uri: item.uri.toString()}} style={{width: '100%', height: 200}}/>}
                 <View style={styles.headerWrapper}>
-                    <Text style={styles.cardTitle}>{item.name} - </Text>
-                    <Text style={styles.categoryLabel}>{item.category}</Text>
+                    <Text style={styles.cardTitle}>{item.itemName} - </Text>
+                    <Text style={styles.categoryLabel}>{item.itemCategory}</Text>
                 </View>
 
                 {item.description && <Text style={styles.cardDescription}>{item.description}</Text>}
                 <View style={styles.cardFooter}>
-                    <Text style={styles.cardPrice}>Rs.{item.price}</Text>
-                    <TouchableOpacity onPress={() => handleAddToCart(item.id)}>
+                    <Text style={styles.cardPrice}>Rs.{item.pricePerItem}</Text>
+                    <TouchableOpacity onPress={handleAddToCart}>
                         {item.isAdded && item.id ? <Ionicons name="md-cart" size={32} color="#FF5A5F"/> :
                             <Ionicons name="md-cart-outline" size={32} color="#FF5A5F"/>}
                     </TouchableOpacity>

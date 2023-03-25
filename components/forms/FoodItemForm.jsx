@@ -19,8 +19,8 @@ const FoodItemForm = () => {
     const [storeName, setStoreName] = useState('');
     const [storeList, setStoreList] = useState([])
 
-    useEffect(async () => {
-        await fetchStores()
+    useEffect( () => {
+        fetchStores()
     }, [])
 
     const fetchStores = async () => {
@@ -47,6 +47,7 @@ const FoodItemForm = () => {
             itemCategory: category,
             uri: image,
         }
+        console.log(foodItem)
 
         setName('')
         setDescription('')
@@ -61,7 +62,7 @@ const FoodItemForm = () => {
     }
 
     const createStore = async (foodItem) => {
-        await set(ref(database, `food-store/food-items/` + foodItem.id), foodItem)
+        await set(ref(database, 'food-items/' + foodItem.id), foodItem)
     }
 
     const handleChooseImage = async () => {
@@ -152,8 +153,8 @@ const FoodItemForm = () => {
                 <TouchableOpacity style={styles.imagePicker} onPress={handleChooseImage}>
                     <Text style={styles.imageButton}>Choose image</Text>
                 </TouchableOpacity>
-                {image &&
-                    <Image source={{uri: image}} style={{width: 200, height: 200}} contentFit="contain"/>}
+                {isImageSelected &&
+                    <Image source={{uri: image.toString()}} style={{width: 200, height: 200}} contentFit="contain"/>}
 
             </View>
 

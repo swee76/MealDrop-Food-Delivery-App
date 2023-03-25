@@ -5,51 +5,30 @@ import {onValue, ref, update} from "firebase/database";
 import {database} from "../../firebase";
 
 const StoreDetailsCard = ({store}) => {
-    const [newStoreName, setNewStoreName] = useState('');
     const [newLocation, setNewLocation] = useState('');
     const [newBusinessHours, setNewBusinessHours] = useState('');
     const [newContactInfo, setNewContactInfo] = useState('');
 
     const [isEditMode, setIsEditMode] = useState(false);
 
-    const handleEditStoreDetails = async (id) => {
-        if (store.storeName === '' || store.location === '' || store.businessHours === '' || store.contactInfo === '') {
-            alert('Please fill all fields')
-            return
-        }
-
-        setIsEditMode(prevState => !prevState)
+    const handleDelete = async () => {
         const storeData = {
-            id: store.id,
-            storeName: newStoreName,
-            location: newLocation,
-            businessHours: newBusinessHours,
-            contactInfo: newContactInfo,
-        }
-
-        update(ref(database, 'food-store/' + id), storeData).then(() => {
-            Alert.alert("Updated Successfully")
-        })
-    }
-
-    const handleDeleteMenuItem = async (id) => {
-        const storeData = {
-            id: null,
             storeName: null,
-            location: null,
+            storeLocation: null,
             businessHours: null,
             contactInfo: null,
         }
 
-
-        update(ref(database, 'food-store/' + id), storeData)
+        update(ref(database, 'food-store/' + store.id), storeData)
             .then(() => {
                 Alert.alert("Deleted Successfully")
-            })
+            }).catch((err) => {
+            Alert.alert('Store delete Failed')
+        })
 
     }
 
-    const handleEdit = () => {
+    const handleEdit = async () => {
         if (isEditMode) {
             if (newLocation === '' || newBusinessHours === '' || newContactInfo === '') {
                 Alert.alert("Please set all the fields")
@@ -57,7 +36,7 @@ const StoreDetailsCard = ({store}) => {
             }
 
             const storeData = {
-                location: newLocation,
+                storeLocation: newLocation,
                 businessHours: newBusinessHours,
                 contactInfo: newContactInfo,
             }
@@ -79,7 +58,7 @@ const StoreDetailsCard = ({store}) => {
         <View key={store.id} style={styles.container}>
             <View style={styles.headerWrapper}>
                 <Text style={styles.title}>{store.storeName}</Text>
-                <TouchableOpacity onPress={() => handleDeleteMenuItem(store.id)} style={styles.deleteButton}>
+                <TouchableOpacity onPress={() => handleDelete} style={styles.deleteButton}>
                     <MaterialCommunityIcons name="delete-circle-outline" size={32} color="red"/>
                 </TouchableOpacity>
             </View>
@@ -138,7 +117,6 @@ const StoreDetailsCard = ({store}) => {
                 </Text>
             </TouchableOpacity>
         </View>
-        // onPress={handleEditStoreDetails}
     )
 }
 

@@ -1,10 +1,9 @@
-import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {ScrollView, StyleSheet, Text, View} from "react-native";
 import {Link} from "expo-router";
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import React, {useEffect, useState} from "react";
 import {onValue, ref} from "firebase/database";
 import {database} from "../firebase";
-import {getObject} from "../storage";
 import StoreDetailsCard from "../components/list/StoreDetailsCard";
 
 const ViewStoreList = () => {
