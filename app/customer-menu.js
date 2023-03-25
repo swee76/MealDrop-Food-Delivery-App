@@ -90,6 +90,23 @@ const styles = StyleSheet.create({
   itemPrice: {
     fontSize: 16,
   },
+  button: {
+    backgroundColor: '#FF5A5F',
+    borderRadius: 4,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    minWidth: 100,
+  },
+  editButton: {
+    backgroundColor: '#d0a852',
+    marginRight: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 });
 
 export default CustomerMenu ;
