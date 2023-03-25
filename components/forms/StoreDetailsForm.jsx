@@ -20,33 +20,33 @@ const StoreDetailsForm = () => {
         const hasTenDigits = /^\d{10}$/.test(contactInfo);
         const timeValidation = parseFloat(businessHours)
 
-        console.log(isNumericContact && hasTenDigits)
-        if (isNumericContact && hasTenDigits) {
-            if (isNumericBusinessHours && !isNaN(timeValidation) && timeValidation > 0 && timeValidation <= 24) {
-                const storeInfo = {
-                    id: uuid.v4(),
-                    storeName: storeName,
-                    storeLocation: location,
-                    businessHours: businessHours,
-                    contactInfo: contactInfo,
+        if (storeName === '' || location === '' || businessHours === '' || contactInfo === '') {
+            if (isNumericContact && hasTenDigits) {
+                if (isNumericBusinessHours && !isNaN(timeValidation) && timeValidation > 0 && timeValidation <= 24) {
+                    const storeInfo = {
+                        id: uuid.v4(),
+                        storeName: storeName,
+                        storeLocation: location,
+                        businessHours: businessHours,
+                        contactInfo: contactInfo,
+                    }
+                    setStoreName('')
+                    setLocation('')
+                    setBusinessHours('')
+                    setContactInfo('')
+
+                    createStore(storeInfo).then(() => {
+                        router.push('/view-store-list')
+                    }).catch((error) => {
+                        console.error(error)
+                    })
+                } else {
+                    Alert.alert("Please Enter Valid hours")
                 }
-                setStoreName('')
-                setLocation('')
-                setBusinessHours('')
-                setContactInfo('')
 
-                createStore(storeInfo).then(() => {
-                    // Alert.alert("Store added successfully");
-                    router.push('/view-store-list')
-                }).catch((error) => {
-                    console.error(error)
-                })
             } else {
-                Alert.alert("Please Enter Valid hours")
+                Alert.alert("Please Enter Valid contact")
             }
-
-        } else {
-            Alert.alert("Please Enter Valid contact")
         }
     };
 

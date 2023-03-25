@@ -29,10 +29,6 @@ const ViewStoreList = () => {
         })
     }
 
-    useEffect(() => {
-        console.log(storeList)
-    }, [storeList])
-
     return (
         <BasicPageWrapper>
             <View style={styles.breadcrumbContainer}>
@@ -40,7 +36,7 @@ const ViewStoreList = () => {
             </View>
             <View style={styles.container}>
                 <Text style={styles.heading}>~Store List~</Text>
-                <ScrollView style={{maxHeight: '200%'}}>
+                <ScrollView contentContainerStyle={{maxHeight: '300%'}}>
                     {storeList.map((store, index) => <StoreDetailsCard store={store} key={index}/>)}
                 </ScrollView>
             </View>
@@ -78,7 +74,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
-        margin: 16,
+        marginHorizontal: 16,
+        marginBottom: 16
     },
     heading: {
         fontSize: 24,

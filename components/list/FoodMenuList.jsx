@@ -3,8 +3,8 @@ import {View, Text, StyleSheet, ScrollView, TouchableOpacity} from 'react-native
 import {Image} from 'expo-image'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
-// import firebase from 'firebase/compat';
-// import 'firebase/compat/database';
+import {onValue, ref} from "firebase/database";
+import {database} from "../../firebase";
 
 const itemsList = [{
     id: 1,
@@ -40,18 +40,43 @@ const itemsList = [{
     isAdded: false
 }]
 const FoodMenuList = () => {
-    const [menuItems, setMenuItems] = useState(itemsList);
+    const [storeList, setStoreList] = useState([])
+    const [menuItems, setMenuItems] = useState([]);
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const menuItemsRef = firebase.database().ref('menuItems');
-    //         const snapshot = await menuItemsRef.once('value');
-    //         const data = snapshot.val();
-    //         const menuItemsArray = Object.keys(data).map((key) => ({ id: key, ...data[key] }));
-    //         setMenuItems(menuItemsArray);
-    //     };
-    //     fetchData();
-    // }, []);
+    useEffect(async () => {
+        await fetchStores();
+    }, []);
+
+
+    const fetchStores = async () => {
+        const storeInfo = ref(database, 'food-store/')
+
+        onValue(storeInfo, (snapshot) => {
+            const data = snapshot.val()
+
+            const stores = [];
+
+            for (const key in data) {
+                stores.push(data[key])
+            }
+            setStoreList(stores)
+        })
+    }
+
+    const fetchMenuItems = async (storeName) => {
+        const foodItemInfo = ref(database, `food-store/${storeName}/`)
+
+        onValue(foodItemInfo, snapshot => {
+            const data = snapshot.val()
+
+            const foodItems = [];
+
+            for (const key in data) {
+                foodItems.push(data[key])
+            }
+            setMenuItems(foodItems)
+        })
+    }
 
     const handleDeleteMenuItem = (itemID) => {
         // implement code here
@@ -62,28 +87,34 @@ const FoodMenuList = () => {
     }
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView contentContainerStyle={{
+            maxHeight: '300%'
+        }}>
             <Text style={styles.heading}>~Food Menu~</Text>
-            {menuItems.map((item) => <View style={styles.card} key={item.id}>
-                <TouchableOpacity onPress={handleDeleteMenuItem(item.id)} style={styles.deleteButton}>
-                    <MaterialCommunityIcons name="delete-circle-outline" size={32} color="red"/>
-                </TouchableOpacity>
-
-                {item.image && <Image source={{uri: item.image.toString()}} style={{width: '100%', height: 200}}/>}
-                <View style={styles.headerWrapper}>
-                    <Text style={styles.cardTitle}>{item.name} - </Text>
-                    <Text style={styles.categoryLabel}>{item.category}</Text>
-                </View>
-
-                {item.description && <Text style={styles.cardDescription}>{item.description}</Text>}
-                <View style={styles.cardFooter}>
-                    <Text style={styles.cardPrice}>Rs.{item.price}</Text>
-                    <TouchableOpacity onPress={handleAddToCart(item.id)}>
-                        {item.isAdded && item.id ? <Ionicons name="md-cart" size={32} color="#FF5A5F"/> :
-                            <Ionicons name="md-cart-outline" size={32} color="#FF5A5F"/>}
+            {storeList.map(store => <View>
+                <Text>{store.storeName}</Text>
+                {() => fetchMenuItems(store.storeName)}
+                {menuItems.map((item) => <View style={styles.card} key={item.id}>
+                    <TouchableOpacity onPress={handleDeleteMenuItem(item.id)} style={styles.deleteButton}>
+                        <MaterialCommunityIcons name="delete-circle-outline" size={32} color="red"/>
                     </TouchableOpacity>
-                </View>
 
+                    {item.image && <Image source={{uri: item.image.toString()}} style={{width: '100%', height: 200}}/>}
+                    <View style={styles.headerWrapper}>
+                        <Text style={styles.cardTitle}>{item.name} - </Text>
+                        <Text style={styles.categoryLabel}>{item.category}</Text>
+                    </View>
+
+                    {item.description && <Text style={styles.cardDescription}>{item.description}</Text>}
+                    <View style={styles.cardFooter}>
+                        <Text style={styles.cardPrice}>Rs.{item.price}</Text>
+                        <TouchableOpacity onPress={handleAddToCart(item.id)}>
+                            {item.isAdded && item.id ? <Ionicons name="md-cart" size={32} color="#FF5A5F"/> :
+                                <Ionicons name="md-cart-outline" size={32} color="#FF5A5F"/>}
+                        </TouchableOpacity>
+                    </View>
+
+                </View>)}
             </View>)}
         </ScrollView>
     );
@@ -92,11 +123,10 @@ const FoodMenuList = () => {
 export default FoodMenuList;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 10,
-        overflow: 'scroll'
-    },
+    // container: {
+    //     flex: 1,
+    //     padding: 10,
+    // },
     headerWrapper: {
         display: 'flex',
         flexDirection: 'row',

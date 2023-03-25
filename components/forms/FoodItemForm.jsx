@@ -1,19 +1,68 @@
-import React, {useState} from 'react';
-import {View, Text, TextInput, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, TextInput, TouchableOpacity, Image, StyleSheet, ScrollView} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
-// import {auth} from 'firebase';
-// import firebase from "firebase/compat";
+import uuid from "react-native-uuid";
+import {onValue, ref, set} from "firebase/database";
+import {database} from "../../firebase";
+import {useRouter} from "expo-router";
 
 const FoodItemForm = () => {
-    // {navigation} -prop
+    const router = useRouter();
+
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [category, setCategory] = useState('');
     const [image, setImage] = useState(null);
     const [isImageSelected, setIsImageSelected] = useState(false)
+    const [storeName, setStoreName] = useState('');
+    const [storeList, setStoreList] = useState([])
 
+    useEffect(() => {
+        fetchStores()
+    }, [])
+
+    const fetchStores = async () => {
+        const storeInfo = ref(database, 'food-store/')
+
+        onValue(storeInfo, (snapshot) => {
+            const data = snapshot.val()
+
+            const stores = [];
+
+            for (const key in data) {
+                stores.push(data[key])
+            }
+            setStoreList(stores)
+        })
+    }
+
+    const handleSubmit = () => {
+        const foodItem = {
+            id: uuid.v4(),
+            itemName: name,
+            description: description,
+            pricePerItem: price,
+            itemCategory: category,
+            uri: image,
+        }
+
+        setName('')
+        setDescription('')
+        setPrice('')
+        setCategory('')
+        setImage(null)
+        setIsImageSelected(false)
+
+        createStore(foodItem).then(() => {
+            router.push('/food-menu')
+        })
+    }
+
+    const createStore = async (foodItem) => {
+        await set(ref(database, `food-store/${storeName}/food-items/` + foodItem.id), foodItem)
+    }
 
     // const handleSubmit = async () => {
     //     try {
@@ -54,8 +103,6 @@ const FoodItemForm = () => {
                 quality: 1,
             });
 
-            console.log(result);
-
             if (!result.canceled) {
                 setImage(result.assets[0].uri);
                 setIsImageSelected(true)
@@ -70,7 +117,7 @@ const FoodItemForm = () => {
 
 
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={{maxHeight: '300%'}}>
             <Text style={styles.heading}>~Add Food Menu Item~</Text>
             <View style={styles.form}>
                 <View style={styles.field}>
@@ -105,11 +152,23 @@ const FoodItemForm = () => {
                         selectedValue={category}
                         onValueChange={(value) => setCategory(value)}
                     >
-                        <Picker.Item label="Select a category" value=""/>
+                        <Picker.Item label="Select a store" value=""/>
                         <Picker.Item label="Appetizer" value="appetizer"/>
                         <Picker.Item label="Main Course" value="main-course"/>
                         <Picker.Item label="Dessert" value="dessert"/>
                         <Picker.Item label="Beverage" value="beverage"/>
+                    </Picker>
+                </View>
+                <View style={styles.field}>
+                    <Text style={styles.label}>Select a Store:</Text>
+                    <Picker
+                        style={styles.input}
+                        selectedValue={storeName}
+                        onValueChange={(value) => setStoreName(value)}
+                    >
+                        <Picker.Item label="Select a category" value=""/>
+                        {storeList.map((storeData) => <Picker.Item label={storeData.storeName}
+                                                                   value={storeData.storeName}/>)}
                     </Picker>
                 </View>
             </View>
@@ -123,23 +182,22 @@ const FoodItemForm = () => {
 
             </View>
 
-            <TouchableOpacity style={styles.buttonContainer}>
-                {/*onpress={handleSubmit}*/}
+            <TouchableOpacity style={styles.buttonContainer} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Create Food Menu Item</Text>
             </TouchableOpacity>
-        </View>
+        </ScrollView>
     );
 }
 
 export default FoodItemForm;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginVertical: 10
-    },
+    // container: {
+    //     flex: 1,
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    //     marginVertical: 10
+    // },
     heading: {
         fontSize: 24,
         fontWeight: 'bold',
@@ -201,6 +259,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: '600',
         fontSize: 16,
-        color:'#fff'
+        color: '#fff'
     },
 })

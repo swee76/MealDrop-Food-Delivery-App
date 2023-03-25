@@ -1,12 +1,50 @@
-import {Text, TouchableOpacity, View, StyleSheet} from "react-native";
+import {Text, TouchableOpacity, View, StyleSheet, Alert, TextInput} from "react-native";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
+import {useState} from "react";
+import {onValue, ref, update} from "firebase/database";
+import {database} from "../../firebase";
 
 const StoreDetailsCard = ({store}) => {
-    const handleEditStoreDetails = (name) => {
+    const [newStoreName, setNewStoreName] = useState('');
+    const [newLocation, setNewLocation] = useState('');
+    const [newBusinessHours, setNewBusinessHours] = useState('');
+    const [newContactInfo, setNewContactInfo] = useState('');
+    const [isEditMode, setIsEditMode] = useState(false);
 
+    const handleEditStoreDetails = async (id) => {
+        if (store.storeName === '' || store.location === '' || store.businessHours === '' || store.contactInfo === '') {
+            alert('Please fill all fields')
+            return
+        }
+
+        setIsEditMode(prevState => !prevState)
+        const storeData = {
+            id: store.id,
+            storeName: newStoreName,
+            location: newLocation,
+            businessHours: newBusinessHours,
+            contactInfo: newContactInfo,
+        }
+
+        update(ref(database, 'food-store/' + id), storeData).then(() => {
+            Alert.alert("Updated Successfully")
+        })
     }
 
-    const handleDeleteMenuItem = (id) => {
+    const handleDeleteMenuItem = async (id) => {
+        const storeData = {
+            id: null,
+            storeName: null,
+            location: null,
+            businessHours: null,
+            contactInfo: null,
+        }
+
+
+        update(ref(database, 'food-store/' + id), storeData)
+            .then(() => {
+                Alert.alert("Deleted Successfully")
+            })
 
     }
 
@@ -14,29 +52,33 @@ const StoreDetailsCard = ({store}) => {
         <View key={store.id} style={styles.container}>
             <View style={styles.headerWrapper}>
                 <Text style={styles.title}>{store.storeName}</Text>
-                <TouchableOpacity onPress={handleDeleteMenuItem(store.id)} style={styles.deleteButton}>
+                <TouchableOpacity onPress={() => handleDeleteMenuItem(store.id)} style={styles.deleteButton}>
                     <MaterialCommunityIcons name="delete-circle-outline" size={32} color="red"/>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.field}>
                 <Text>{'\u2022'} Store Location:</Text>
-                <Text style={styles.data}>{store.storeLocation}</Text>
+                <TextInput style={styles.data} value={isEditMode ? newLocation : store.storeLocation}
+                           onChangeText={(text) => setNewLocation(text)} editable={isEditMode}/>
             </View>
             <View style={styles.field}>
                 <Text>{'\u2022'} Business Hours:</Text>
-                <Text style={styles.data}>{store.businessHours}</Text>
+                <TextInput style={styles.data} value={isEditMode ? newBusinessHours : store.businessHours}
+                           onChangeText={(text) => setNewBusinessHours(text)} editable={isEditMode}/>
             </View>
             <View style={styles.field}>
                 <Text>{'\u2022'} Contact Info:</Text>
-                <Text style={styles.data}>{store.contactInfo}</Text>
+                <TextInput style={styles.data} value={isEditMode ? newContactInfo : store.contactInfo}
+                           onChangeText={(text) => setNewContactInfo(text)} editable={isEditMode}/>
             </View>
 
-            <TouchableOpacity style={styles.buttonContainer} onPress={handleEditStoreDetails(store.id)}>
+            <TouchableOpacity style={styles.buttonContainer} onPress={() => handleEditStoreDetails(store.id)}>
                 <Text style={styles.buttonText}>
-                    Edit
+                    {isEditMode ? 'Save' : 'Edit'}
                 </Text>
             </TouchableOpacity></View>
+        // onPress={handleEditStoreDetails}
     )
 }
 
@@ -59,6 +101,7 @@ const styles = StyleSheet.create({
     },
     field: {
         flexDirection: 'row',
+        alignItems: 'center',
         marginVertical: 6
     },
     title: {
@@ -74,7 +117,7 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: '#e7b8ae',
         borderRadius: 5,
-        marginVertical: 10,
+        marginVertical: 10
     },
     buttonText: {
         padding: 10,
