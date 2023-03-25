@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
             justifyContent: 'center',
             marginVertical: 16,
             position: 'relative',
+            zIndex:-1
         },
         heading: {
             fontSize: 24,
