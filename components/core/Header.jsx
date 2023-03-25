@@ -1,11 +1,7 @@
 import {Text, View} from "react-native";
-import {useEffect} from "react";
 
 
 const Header = ({user}) => {
-    useEffect(() => {
-        console.log(user)
-    }, [user])
 
     return (
         <View style={{
