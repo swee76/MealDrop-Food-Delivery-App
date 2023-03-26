@@ -1,4 +1,4 @@
-import {Text, TouchableOpacity, View, StyleSheet} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Link, useRouter} from "expo-router";
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import StoreDetailsForm from "../components/forms/StoreDetailsForm";

@@ -1,5 +1,4 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Link} from "expo-router";
 import {useRouter} from "expo-router";
 
 const AdminHome = () => {
@@ -8,31 +7,32 @@ const AdminHome = () => {
     const profiles = [
         {
             name: 'Order history',
-            link: '/orderHistory'
+            link: '/order-history'
         }, {
-            name: 'Menues',
-            link: '/menuScreen'
+            name: 'Menus',
+            link: '/menu-screen'
         }, {
             name: 'Owner Details',
-            link: '/OwnerDetails'
+            link: '/owner-details'
         }
     ]
-    
-    return (
-    
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'} }>
 
-        <View style={styles.profileContainer}>
-        {profiles.map((profile, index) => (
+    return (
+
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+
+            <View style={styles.profileContainer}>
+                {profiles.map((profile, index) => (
                     <TouchableOpacity
                         onPress={() => router.push(profile.link)}
                         style={styles.profileButton} key={index}>
                         <Text style={styles.profileButtonText}>{profile.name}</Text>
                     </TouchableOpacity>
                 ))}
-                </View>
-    </View>
-);}
+            </View>
+        </View>
+    );
+}
 
 export default AdminHome;
 

@@ -6,7 +6,7 @@ import {auth, database} from "../firebase";
 import {useRouter} from "expo-router";
 import {Picker} from '@react-native-picker/picker';
 import {ref, set} from "firebase/database";
-import {storeData, storeObject} from "../storage";
+import {storeObject} from "../storage";
 
 const Register = () => {
     const [email, setEmail] = useState()

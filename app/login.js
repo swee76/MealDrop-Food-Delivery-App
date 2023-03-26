@@ -36,7 +36,11 @@ const Login = () => {
                                     router.push('/rider-profile')
                                 } else if (data.type === 'store-owner') {
                                     router.push('/store-profile')
-                                } else {
+                                } else if (data.type === 'admin') {
+                                    router.push('/admin-home')
+                                } else if (data.type === 'customer') {
+                                    router.push('/customer-profile')
+                                }else {
                                     router.push('/')
                                 }
                             })
