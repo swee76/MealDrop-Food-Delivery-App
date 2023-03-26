@@ -1,5 +1,4 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Link} from "expo-router";
 import {useRouter} from "expo-router";
 
 const AdminHome = () => {
@@ -8,13 +7,13 @@ const AdminHome = () => {
     const profiles = [
         {
             name: 'Order history',
-            link: '/orderHistory'
+            link: '/order-history'
         }, {
-            name: 'Menues',
-            link: '/menuScreen'
+            name: 'Menus',
+            link: '/menu-screen'
         }, {
             name: 'Owner Details',
-            link: '/OwnerDetails'
+            link: '/owner-details'
         }
     ]
     

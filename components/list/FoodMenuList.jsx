@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Alert} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
-import {onValue, ref, update} from "firebase/database";
+import {onValue, ref} from "firebase/database";
 import {database} from "../../firebase";
 
 const FoodMenuList = () => {

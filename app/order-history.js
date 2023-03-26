@@ -1,45 +1,34 @@
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
-import {signInWithEmailAndPassword} from "firebase/auth";
-import {useEffect, useState} from "react";
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
-import {auth} from "../firebase";
-import {useRouter} from "expo-router";
+import {useState} from "react";
+import {StyleSheet, Text, View,Alert} from "react-native";
 import {Link} from "expo-router";
-import { database } from "../firebase";
-import { getDatabase, ref, child, get } from "firebase/database";
+import {child, get, getDatabase, ref} from "firebase/database";
 
 const orderHistory = () => {
   const [ordersHistory , setOrdersHistory] = useState();
-  const [email, setEmail] = useState()
   const [singedIn, setSingedIn] = useState(false)
-  const router = useRouter();
- 
-    // const orders = [
-    //     { id: 1, restaurant: 'Burger King', total: '$25.00', date: 'March 1, 2023' },
-    //     { id: 2, restaurant: 'Pizza Hut', total: '$30.00', date: 'February 28, 2023' },
-    //     { id: 3, restaurant: 'Taco Bell', total: '$15.00', date: 'February 27, 2023' },
-    //   ];
 
       const dbRef = ref(getDatabase());
       get(child(dbRef, `orders`)).then((snapshot) => {
         if (snapshot.exists()) {
           setOrdersHistory(snapshot.val())
         } else {
-          console.log("No data available");
+          Alert.alert("No data available");
         }
       }).catch((error) => {
+          Alert.alert("Order history fetch failed");
         console.error(error);
       });
   
    
 
     const handleFunction = () => {
-      
+    //   implement code here
     }
 
     return (
         <BasicPageWrapper singedIn={singedIn}>
-            <Link href={'/adminhome'}>Go back</Link>
+            <Link href={'/admin-home'}>Go back</Link>
             <View style={styles.container}>
       <Text style={styles.header}>Order History</Text>
       <View>
@@ -58,13 +47,6 @@ const orderHistory = () => {
         </View>
       ))}
     </View>
-      {/* {orders.map((order) => (
-        <View key={order.id} style={styles.orderContainer}>
-          <Text style={styles.restaurant}>{order.restaurant}</Text>
-          <Text style={styles.total}>{order.total}</Text>
-          <Text style={styles.date}>{order.date}</Text>
-        </View>
-      ))} */}
     </View>
 
         </BasicPageWrapper>

@@ -10,7 +10,7 @@ const HomePage = () => (
             <Link href={'/store-profile'}>Manage Store Details</Link>
             <Link href={'/login'}>Login</Link>
             <Link href={'/choose-type'}>Profile Type select</Link>
-            <Link href={'/adminhome'}>Admin Home</Link>
+            <Link href={'/admin-home'}>Admin Home</Link>
             <Link href={'/food-menu'}>View Food Menu List</Link>
             <Link href={'/view-store-list'}>View Store List</Link>
         </View>

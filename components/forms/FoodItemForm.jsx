@@ -52,7 +52,6 @@ const FoodItemForm = () => {
             itemCategory: category,
             uri: image,
         }
-        console.log(foodItem)
 
         setName('')
         setDescription('')

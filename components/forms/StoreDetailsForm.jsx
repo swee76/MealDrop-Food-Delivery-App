@@ -1,4 +1,4 @@
-import {Text, View, TextInput, StyleSheet, TouchableOpacity, Image, Alert} from "react-native";
+import {Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import React, {useState} from 'react';
 import {database} from "../../firebase";
 import {ref, set} from "firebase/database";

@@ -1,8 +1,8 @@
 import {Text, TouchableOpacity, View, StyleSheet, Image} from 'react-native';
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import React from "react";
-import { getDatabase, ref, onValue} from "firebase/database";
+import { ref, onValue} from "firebase/database";
 import {database} from "../firebase";
 
 const CustomerProfile = () => {

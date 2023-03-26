@@ -1,7 +1,7 @@
-import {Text, TouchableOpacity, View, StyleSheet, Alert, TextInput} from "react-native";
+import {Alert, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
-import {useEffect, useState} from "react";
-import {onValue, ref, update} from "firebase/database";
+import {useState} from "react";
+import {ref, update} from "firebase/database";
 import {database} from "../../firebase";
 
 const StoreDetailsCard = ({store}) => {

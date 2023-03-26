@@ -1,5 +1,5 @@
-import {Text, TouchableOpacity, View, StyleSheet, TextInput, Image} from 'react-native';
-import {Link, useRouter} from "expo-router";
+import {Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {useRouter} from "expo-router";
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import React, {useState} from "react";
 
@@ -12,11 +12,7 @@ const UpadateCustomer = () => {
     const [City, setCity] = useState('');
 
     const handleSave = () => {
-        console.log(name);
-        console.log(Email);
-        console.log(Phone);
-        console.log(Address);
-        console.log(City);
+    //    Implement code here
     };
 
     return (

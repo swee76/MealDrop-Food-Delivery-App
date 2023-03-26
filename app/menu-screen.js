@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput,Alert } from 'react-native';
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import {Link} from "expo-router";
 import { getDatabase, ref, child, get, set } from "firebase/database";
 
 const menuScreen = () => {
-  const [menuItems, setMenuItems] = useState();
   const [singedIn, setSingedIn] = useState(false);
   const [selectedStore, setSelectedStore] = useState();
   const [selectedItem, setSelectedItem] = useState(null);
@@ -22,7 +21,7 @@ const menuScreen = () => {
         .map(([key, value]) => ({ key, storeName: value.storeName }));
         setStoresList(unblockedStores)
       } else {
-        console.log("No data available");
+        Alert.alert("No data available");
       }
     }).catch((error) => {
       console.error(error);
@@ -32,7 +31,7 @@ const menuScreen = () => {
       if (snapshot.exists()) {
         setMenuList(snapshot.val())
       } else {
-        console.log("No data available");
+        Alert.alert("No data available");
       }
     }).catch((error) => {
       console.error(error);
@@ -57,7 +56,7 @@ const menuScreen = () => {
     if (selectedItem && selectedStore) {
       set(child(dbRef, `menues/${selectedStore}/${selectedItem.key}`), selectedItem)
         .then(() => {
-          console.log("Item saved successfully.");
+          Alert.alert("Item saved successfully.");
           setSelectedItem(null);
         })
         .catch((error) => {
@@ -68,7 +67,7 @@ const menuScreen = () => {
 
   return (
     <BasicPageWrapper singedIn={singedIn}>
-      <Link href={'/adminhome'}>Go back</Link>
+      <Link href={'/admin-home'}>Go back</Link>
       <View style={styles.container}>
         <Text style={styles.itemName}>Choose a store</Text>
         {storesList?.map((store) => (
