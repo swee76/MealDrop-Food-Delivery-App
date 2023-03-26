@@ -47,7 +47,7 @@ const RiderProfile = () => {
         if (city) {
             getStoresNearMe()
         }
-    },[city])
+    }, [city])
 
     const [stores, setStores] = useState([])
     const getStoresNearMe = async () => {

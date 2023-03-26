@@ -116,8 +116,6 @@ const RiderProfile = () => {
     }, [image, imageCaptured])
 
 
-
-
     const uploadImage = async (blob) => {
         const imageRef = storageRef(storage, 'images/' + userId + '.jpg');
 

@@ -24,31 +24,31 @@ const StoreDetailsForm = () => {
             Alert.alert("please set all fields")
             return
         }
-            if (isNumericContact && hasTenDigits) {
-                if (isNumericBusinessHours && !isNaN(timeValidation) && timeValidation > 0 && timeValidation <= 24) {
-                    const storeInfo = {
-                        id: uuid.v4(),
-                        storeName: storeName,
-                        storeLocation: location,
-                        businessHours: businessHours,
-                        contactInfo: contactInfo,
-                    }
-                    setStoreName('')
-                    setLocation('')
-                    setBusinessHours('')
-                    setContactInfo('')
-
-                    createStore(storeInfo).then(() => {
-                        router.push('/view-store-list')
-                    }).catch((error) => {
-                        console.error(error)
-                    })
-                } else {
-                    Alert.alert("Please Enter Valid hours between 1 - 24 ")
+        if (isNumericContact && hasTenDigits) {
+            if (isNumericBusinessHours && !isNaN(timeValidation) && timeValidation > 0 && timeValidation <= 24) {
+                const storeInfo = {
+                    id: uuid.v4(),
+                    storeName: storeName,
+                    storeLocation: location,
+                    businessHours: businessHours,
+                    contactInfo: contactInfo,
                 }
+                setStoreName('')
+                setLocation('')
+                setBusinessHours('')
+                setContactInfo('')
+
+                createStore(storeInfo).then(() => {
+                    router.push('/view-store-list')
+                }).catch((error) => {
+                    console.error(error)
+                })
             } else {
-                Alert.alert("Please Enter Valid contact")
+                Alert.alert("Please Enter Valid hours between 1 - 24 ")
             }
+        } else {
+            Alert.alert("Please Enter Valid contact")
+        }
     };
 
     const createStore = async (storeInfo) => {

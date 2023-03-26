@@ -16,22 +16,23 @@ const AdminHome = () => {
             link: '/owner-details'
         }
     ]
-    
-    return (
-    
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'} }>
 
-        <View style={styles.profileContainer}>
-        {profiles.map((profile, index) => (
+    return (
+
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+
+            <View style={styles.profileContainer}>
+                {profiles.map((profile, index) => (
                     <TouchableOpacity
                         onPress={() => router.push(profile.link)}
                         style={styles.profileButton} key={index}>
                         <Text style={styles.profileButtonText}>{profile.name}</Text>
                     </TouchableOpacity>
                 ))}
-                </View>
-    </View>
-);}
+            </View>
+        </View>
+    );
+}
 
 export default AdminHome;
 

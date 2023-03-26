@@ -12,7 +12,7 @@ const UpadateCustomer = () => {
     const [City, setCity] = useState('');
 
     const handleSave = () => {
-    //    Implement code here
+        //    Implement code here
     };
 
     return (
@@ -21,7 +21,12 @@ const UpadateCustomer = () => {
                 <View>
                     <View style={{alignItems: 'center'}}><Text style={styles.text}>Update Customer</Text></View>
                     <View style={styles.imageContainer}><Image source={require('../assets/customer-profile.jpeg')}
-                              style={{width: 200, height: 160, margin: 12, alignItems: 'center',}}/></View>
+                                                               style={{
+                                                                   width: 200,
+                                                                   height: 160,
+                                                                   margin: 12,
+                                                                   alignItems: 'center',
+                                                               }}/></View>
                     <View style={styles.container}><TextInput
                         style={styles.input}
                         placeholder="Name"
@@ -53,14 +58,14 @@ const UpadateCustomer = () => {
                             onChangeText={setCity}
                         />
                         <View style={styles.buttonc}>
-                        <TouchableOpacity style={styles.button} onPress={handleSave}>
-                            <Text style={styles.buttonText} >Save</Text>
+                            <TouchableOpacity style={styles.button} onPress={handleSave}>
+                                <Text style={styles.buttonText}>Save</Text>
                             </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={() => {
-                            router.push('/customer-profile')
-                        }}>
-                            <Text style={styles.buttonText}>Back</Text>
-                        </TouchableOpacity></View>
+                            <TouchableOpacity style={styles.button} onPress={() => {
+                                router.push('/customer-profile')
+                            }}>
+                                <Text style={styles.buttonText}>Back</Text>
+                            </TouchableOpacity></View>
                     </View>
                 </View>
             </View>
@@ -92,7 +97,7 @@ const styles = StyleSheet.create({
     },
     edit: {
         width: '15%',
-        color:'red'
+        color: 'red'
     },
     input: {
         width: '100%',
@@ -108,7 +113,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 10,
         marginBottom: 10,
-        alignContent:'center'
+        alignContent: 'center'
     },
     buttonText: {
         color: '#fff',
@@ -122,5 +127,5 @@ const styles = StyleSheet.create({
     imageContainer: {
         alignItems: 'center',
     },
-    
+
 });

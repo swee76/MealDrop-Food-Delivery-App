@@ -73,7 +73,7 @@ const RiderProfileEdit = () => {
         }
 
 
-         update(ref(database, 'users/' + userId), userData)
+        update(ref(database, 'users/' + userId), userData)
             .then(() => {
                 router.push('/rider-profile')
             })
@@ -88,19 +88,19 @@ const RiderProfileEdit = () => {
                 <Text style={styles.header}>Edit Profile</Text>
 
                 <TextInput style={styles.inputField} value={name}
-                            onChangeText={setName}
+                           onChangeText={setName}
                            placeholder={'Name'}/>
                 <TextInput style={styles.inputField} value={phone}
                            onChangeText={setPhone}
                            placeholder={'Phone'}/>
                 <TextInput style={styles.inputField} value={city}
-                            onChangeText={setCity}
+                           onChangeText={setCity}
                            placeholder={'City'}/>
                 <TextInput style={styles.inputField} value={vehicle}
-                            onChangeText={setVehicle}
+                           onChangeText={setVehicle}
                            placeholder={'Vehicle'}/>
                 <TextInput style={styles.inputField} value={vehicleNumber}
-                            onChangeText={setVehicleNumber}
+                           onChangeText={setVehicleNumber}
                            placeholder={'Vehicle Number'}/>
 
 

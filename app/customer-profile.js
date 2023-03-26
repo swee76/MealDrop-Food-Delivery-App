@@ -1,8 +1,8 @@
 import {Text, TouchableOpacity, View, StyleSheet, Image} from 'react-native';
-import { useRouter } from "expo-router";
+import {useRouter} from "expo-router";
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import React from "react";
-import { ref, onValue} from "firebase/database";
+import {ref, onValue} from "firebase/database";
 import {database} from "../firebase";
 
 const CustomerProfile = () => {
@@ -10,7 +10,7 @@ const CustomerProfile = () => {
 
 
     const readUserType = async (userId) => {
-        const userData = ref(database, 'users/' + userId );
+        const userData = ref(database, 'users/' + userId);
         let user
         onValue(userData, (snapshot) => {
             user = snapshot.val()
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 10,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
@@ -93,11 +93,11 @@ const styles = StyleSheet.create({
         flex: 2,
         fontWeight: 'bold',
         marginRight: 10,
-        fontSize:20
+        fontSize: 20
     },
     value: {
         flex: 3,
-        fontSize:20
+        fontSize: 20
     },
     buttonContainer: {
         flexDirection: 'row',
