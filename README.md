@@ -18,7 +18,7 @@ Group Details
 
 MealDrop - Food Delivery App
 
-W.C.Y.S. Lowe (Group Leader)-  IT20014940 
-Kithma A.P.O - IT20228026
-Vidanage K.H. - IT20021320
-Chathuranga K.G.S - IT20016852
+W.C.Y.S. Lowe (Group Leader)-  IT20014940 <br/>
+Kithma A.P.O - IT20228026 <br/>
+Vidanage K.H. - IT20021320 <br/>
+Chathuranga K.G.S - IT20016852 <br/>
