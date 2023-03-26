@@ -40,7 +40,7 @@ const FoodItemForm = () => {
     }
 
     const handleSubmit = () => {
-        if (name === '' || description === '' || price === '' || category === '' || isImageSelected) {
+        if (name === '' || description === '' || price === '' || category === '' || storeName === '' || !isImageSelected) {
             Alert.alert('Please fill all fields')
             return;
         } else {
@@ -53,7 +53,6 @@ const FoodItemForm = () => {
                 itemCategory: category,
                 uri: image,
             }
-            console.log(foodItem)
 
             setName('')
             setDescription('')
