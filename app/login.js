@@ -40,7 +40,7 @@ const Login = () => {
                                     router.push('/admin-home')
                                 } else if (data.type === 'customer') {
                                     router.push('/customer-profile')
-                                }else {
+                                } else {
                                     router.push('/')
                                 }
                             })
@@ -50,8 +50,6 @@ const Login = () => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 // ..
-
-                console.log(error)
 
                 Alert.alert(errorMessage)
             });
