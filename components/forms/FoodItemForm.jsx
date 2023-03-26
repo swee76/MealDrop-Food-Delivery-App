@@ -42,6 +42,7 @@ const FoodItemForm = () => {
     const handleSubmit = () => {
         if (name === '' || description === '' || price === '' || category === '' || isImageSelected) {
             Alert.alert('Please fill all fields')
+            return;
         } else {
 
             const foodItem = {
