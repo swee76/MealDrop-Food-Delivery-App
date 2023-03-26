@@ -21,6 +21,9 @@ const StoreDetailsForm = () => {
         const timeValidation = parseFloat(businessHours)
 
         if (storeName === '' || location === '' || businessHours === '' || contactInfo === '') {
+            Alert.alert("please set all fields")
+            return
+        }
             if (isNumericContact && hasTenDigits) {
                 if (isNumericBusinessHours && !isNaN(timeValidation) && timeValidation > 0 && timeValidation <= 24) {
                     const storeInfo = {
@@ -41,13 +44,11 @@ const StoreDetailsForm = () => {
                         console.error(error)
                     })
                 } else {
-                    Alert.alert("Please Enter Valid hours")
+                    Alert.alert("Please Enter Valid hours between 1 - 24 ")
                 }
-
             } else {
                 Alert.alert("Please Enter Valid contact")
             }
-        }
     };
 
     const createStore = async (storeInfo) => {
@@ -104,7 +105,6 @@ const styles = StyleSheet.create({
             justifyContent: 'center',
             marginVertical: 16,
             position: 'relative',
-            zIndex:-1
         },
         heading: {
             fontSize: 24,

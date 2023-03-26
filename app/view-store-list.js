@@ -1,5 +1,5 @@
-import {ScrollView, StyleSheet, Text, View} from "react-native";
-import {Link} from "expo-router";
+import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Link, useRouter} from "expo-router";
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
 import React, {useEffect, useState} from "react";
 import {onValue, ref} from "firebase/database";
@@ -7,6 +7,8 @@ import {database} from "../firebase";
 import StoreDetailsCard from "../components/list/StoreDetailsCard";
 
 const ViewStoreList = () => {
+    const router = useRouter();
+
     const [storeList, setStoreList] = useState([])
 
     useEffect(() => {
@@ -32,6 +34,12 @@ const ViewStoreList = () => {
         <BasicPageWrapper>
             <View style={styles.breadcrumbContainer}>
                 <Link href={'/'} style={styles.goBack}>Go Back</Link>
+                <TouchableOpacity style={styles.menuItemsButton}
+                                  onPress={() => router.push('/food-menu')}>
+                    <Text style={styles.menuItemsButtonText}>
+                        Check Menu Items
+                    </Text>
+                </TouchableOpacity>
             </View>
             <View style={styles.container}>
                 <Text style={styles.heading}>~Store List~</Text>
