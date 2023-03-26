@@ -14,7 +14,6 @@ const RiderProfile = () => {
 
     const FALLBACK_IMAGE = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'
     const [type, setType] = useState(CameraType.front);
-    const [permission, requestPermission] = Camera.useCameraPermissions();
 
     const [user, setUser] = useState(null);
 
@@ -103,7 +102,6 @@ const RiderProfile = () => {
     const [imageCaptured, setImageCaptured] = useState(false)
     const snapPhoto = async () => {
         const photo = await cameraRef.current.takePictureAsync();
-console.log(photo)
 
         setImage(photo.uri)
         setOpenCamera(false)
@@ -118,16 +116,12 @@ console.log(photo)
     }, [image, imageCaptured])
 
 
-
-
     const uploadImage = async (blob) => {
         const imageRef = storageRef(storage, 'images/' + userId + '.jpg');
 
         uploadBytes(imageRef, blob).then((snapshot) => {
 
             getDownloadURL(imageRef).then((url) => {
-                console.log('File available at', url)
-
                 update(ref(database, 'users/' + userId), {
                     image: url
                 }).then(() => {

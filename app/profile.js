@@ -1,12 +1,8 @@
 import {Text} from 'react-native';
 import {Link} from "expo-router";
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
-import {useState} from "react";
 
 const Profile = () => {
-
-
-
 
     return <BasicPageWrapper>
         <Text style={{

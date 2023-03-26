@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Alert} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
-import {onValue, ref, update} from "firebase/database";
+import {onValue, ref} from "firebase/database";
 import {database} from "../../firebase";
 
 const FoodMenuList = () => {
     const [menuItems, setMenuItems] = useState([]);
 
-    useEffect( () => {
+    useEffect(() => {
         fetchMenuItems()
     }, []);
 
@@ -28,21 +28,21 @@ const FoodMenuList = () => {
     }
 
     const handleDeleteMenuItem = async (itemId) => {
-        const menuItemData ={
-            id:null,
-            description:null,
+        const menuItemData = {
+            id: null,
+            description: null,
             itemCategory: null,
             itemName: null,
             pricePerItem: null,
-            uri:null,
+            uri: null,
         }
 
-        delete(ref(database, 'food-store/' + itemId), menuItemData)
+        delete (ref(database, 'food-store/' + itemId), menuItemData)
             .then(() => {
                 Alert.alert("Deleted Successfully")
             }).catch((err) => {
-            Alert.alert('Store delete Failed')
-        })
+                Alert.alert('Store delete Failed')
+            })
     }
 
     const handleAddToCart = (itemID) => {
@@ -50,10 +50,10 @@ const FoodMenuList = () => {
     }
 
     return (
-        <ScrollView contentContainerStyle={{ flexGrow:0 }}>
+        <ScrollView contentContainerStyle={{flexGrow: 0}}>
             <Text style={styles.heading}>~Food Menu~</Text>
             {menuItems.map((item) => <View style={styles.card} key={item.id}>
-                <TouchableOpacity onPress={()=>handleDeleteMenuItem(item.id)} style={styles.deleteButton}>
+                <TouchableOpacity onPress={() => handleDeleteMenuItem(item.id)} style={styles.deleteButton}>
                     <MaterialCommunityIcons name="delete-circle-outline" size={32} color="red"/>
                 </TouchableOpacity>
 

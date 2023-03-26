@@ -1,7 +1,7 @@
 import {View, StyleSheet} from 'react-native';
 import FoodItemForm from "../components/forms/FoodItemForm";
 import BasicPageWrapper from "../components/wrappers/BasicPageWrapper";
-import {Link, useRouter} from "expo-router";
+import {Link} from "expo-router";
 
 const AddMenuItems = () => {
 
