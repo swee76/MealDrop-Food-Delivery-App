@@ -13,3 +13,12 @@ npx create-react-native-app -t with-router
 - [Expo Router: Docs](https://expo.github.io/router)
 - [Expo Router: Repo](https://github.com/expo/router)
 - [Request for Comments](https://github.com/expo/router/discussions/1)
+
+Group Details
+
+MealDrop - Food Delivery App
+
+W.C.Y.S. Lowe (Group Leader)-  IT20014940 
+Kithma A.P.O - IT20228026
+Vidanage K.H. - IT20021320
+Chathuranga K.G.S - IT20016852
