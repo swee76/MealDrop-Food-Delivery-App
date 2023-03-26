@@ -6,7 +6,7 @@ import uuid from "react-native-uuid";
 import {onValue, ref, set} from "firebase/database";
 import {database} from "../../firebase";
 import {useRouter} from "expo-router";
-import { Entypo } from '@expo/vector-icons';
+import {Entypo} from '@expo/vector-icons';
 
 const FoodItemForm = () => {
     const router = useRouter();
@@ -20,7 +20,7 @@ const FoodItemForm = () => {
     const [storeName, setStoreName] = useState('');
     const [storeList, setStoreList] = useState([])
 
-    useEffect( () => {
+    useEffect(() => {
         fetchStores()
     }, [])
 
@@ -40,30 +40,32 @@ const FoodItemForm = () => {
     }
 
     const handleSubmit = () => {
-        if(name === ''|| description === ''|| price === ''|| category === '' || isImageSelected) {
+        if (name === '' || description === '' || price === '' || category === '' || isImageSelected) {
             Alert.alert('Please fill all fields')
+            return;
+        } else {
+
+            const foodItem = {
+                id: uuid.v4(),
+                itemName: name,
+                description: description,
+                pricePerItem: price,
+                itemCategory: category,
+                uri: image,
+            }
+            console.log(foodItem)
+
+            setName('')
+            setDescription('')
+            setPrice('')
+            setCategory('')
+            setImage(null)
+            setIsImageSelected(false)
+
+            createStore(foodItem).then(() => {
+                router.push('/food-menu')
+            })
         }
-
-        const foodItem = {
-            id: uuid.v4(),
-            itemName: name,
-            description: description,
-            pricePerItem: price,
-            itemCategory: category,
-            uri: image,
-        }
-        console.log(foodItem)
-
-        setName('')
-        setDescription('')
-        setPrice('')
-        setCategory('')
-        setImage(null)
-        setIsImageSelected(false)
-
-        createStore(foodItem).then(() => {
-            router.push('/food-menu')
-        })
     }
 
     const createStore = async (foodItem) => {
@@ -133,7 +135,7 @@ const FoodItemForm = () => {
                         selectedValue={category}
                         onValueChange={(value) => setCategory(value)}
                     >
-                        <Picker.Item label="Select a store" value=""/>
+                        <Picker.Item label="Select a category" value=""/>
                         <Picker.Item label="Appetizer" value="appetizer"/>
                         <Picker.Item label="Main Course" value="main-course"/>
                         <Picker.Item label="Dessert" value="dessert"/>
@@ -147,7 +149,7 @@ const FoodItemForm = () => {
                         selectedValue={storeName}
                         onValueChange={(value) => setStoreName(value)}
                     >
-                        <Picker.Item label="Select a category" value=""/>
+                        <Picker.Item label="Select a store" value=""/>
                         {storeList.map((storeData) => <Picker.Item label={storeData.storeName}
                                                                    value={storeData.storeName}/>)}
                     </Picker>
@@ -161,7 +163,10 @@ const FoodItemForm = () => {
 
                 {isImageSelected &&
                     <View>
-                        <TouchableOpacity style={{padding:6}}  onPress={()=>{setImage(null); setIsImageSelected(!isImageSelected)}}>
+                        <TouchableOpacity style={{padding: 6}} onPress={() => {
+                            setImage(null);
+                            setIsImageSelected(!isImageSelected)
+                        }}>
                             <Entypo name="cross" size={24} color="black"/>
                         </TouchableOpacity>
                         <Image source={{uri: image.toString()}} style={{width: 200, height: 100}} contentFit="contain"/>
@@ -182,9 +187,9 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop:5,
+        marginTop: 5,
         marginBottom: 10,
-        zIndex:-1
+        zIndex: -1
     },
     heading: {
         fontSize: 24,
