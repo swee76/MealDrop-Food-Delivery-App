@@ -56,8 +56,8 @@ const Register = () => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
 
+                console.error(error)
                 Alert.alert(errorMessage)
-                // ..
             });
     }
 

@@ -47,6 +47,8 @@ const Login = () => {
                 const errorMessage = error.message;
                 // ..
 
+                console.log(error)
+
                 Alert.alert(errorMessage)
             });
     }
